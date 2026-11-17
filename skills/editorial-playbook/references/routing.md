@@ -2,23 +2,25 @@
 
 Public workflow: https://github.com/CopernicusP/editorial-playbook
 
-Resolve a supplied checkout or snapshot first. Otherwise read the public repository and record its current commit before selecting files. Do not silently mix versions. A standalone installation of this skill reads the repository documents; it does not bundle them or provide offline access to them.
+Resolve a supplied checkout or snapshot first. Record the playbook version and actual source used. The installable skill bundles its runtime scripts, run guide, finance preset and engine lock. It can prepare from a verified offline source copy. The optional longer guides and templates remain in the public repository; record their actual access rather than assuming they were read.
 
 | Need | Repository path |
 | --- | --- |
-| Start a run | `AGENTS.md`, `profiles/example.json`, `templates/episode-brief.md` |
+| Prepare a finance run | `skills/editorial-playbook/references/run-guide.md`, `skills/editorial-playbook/references/presets/bilingual-finance.json` |
+| Understand acceptance | `docs/DELIVERY-CONTRACT.md` |
+| General planning | `AGENTS.md`, `templates/episode-brief.md` |
 | Input routing and production | `docs/WORKFLOW.md` |
 | Research from a topic | `templates/research-brief.md`, `templates/claim-ledger.md` |
 | Article request | `templates/article-request.md` |
 | Review, repair and handoff | `docs/QUALITY.md`, `templates/editor-feedback.md` |
 | Requested audio or video | `docs/MEDIA.md` |
 
-Read only applicable documents. A private organization profile overrides example selections, not the user's current instructions. Keep private requirements and source packets in the authorized run location.
+Read only applicable documents. `profiles/example.json` remains a legacy descriptive profile and is not accepted as a runtime preset. A compatible private preset can select real organization requirements; keep it and its source packets in the authorized run location. Current user instructions take precedence.
 
 ## Writing core
 
-Use [Evidence to Article](https://github.com/CopernicusP/evidence-to-article), version **0.2.0**, commit **ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc**. Read the [pinned core skill](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/SKILL.md) and applicable references. Relative links resolve inside that same commit.
+Use [Evidence to Article](https://github.com/CopernicusP/evidence-to-article), version **0.2.0**, commit **ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc**. `references/engine-lock.json` selects exact file hashes. Preparation loads those files into the run; acceptance verifies them again before executing the core checker. Read the verified local skill and applicable references, or the [pinned public skill](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/SKILL.md) for a clearly labeled no-code fallback.
 
-Use the core's `references/authorial-voice.md`, `references/editorial-decisions.md` and relevant `references/channels.md` sections for writing. Before using its export/audit helpers, read `references/manifest-contract.md`. The helpers live in the core and do not fetch this wrapper or enforce every profile field. Use them only with real sources and review records. The v0.2.0 checker expects TXT and HTML companions for each canonical article; these can remain internal verification exports when the requested delivery is DOCX only.
+Use the core's `references/authorial-voice.md`, `references/editorial-decisions.md` and relevant `references/channels.md` sections for writing. Read `references/manifest-contract.md` before building its article manifest. The v0.2.0 core checker expects TXT and HTML companions for each canonical article; keep those internal if they are not requested deliverables. The wrapper's separate acceptance checker applies the selected package requirements without pretending the core can inspect Word layout, judge prose or hear media. Neither script grants publication approval.
 
 Upgrade the dependency explicitly after reviewing changes and trying representative inputs. General writing improvements belong in the core; channel choices and production routing belong here; organization-specific information belongs in a separate private profile.

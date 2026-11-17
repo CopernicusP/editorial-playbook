@@ -1,47 +1,56 @@
-# Quality review and handoff
+# Review quality and delivery readiness
 
-The purpose of review is to locate and repair failures a reader would encounter. A checklist completion, an AI-detector score or a fluent paragraph is not evidence that an article is accurate or useful.
+Review should locate and repair failures a reader or listener would encounter. Fluency, an AI-detector score and checklist completion do not establish accuracy or usefulness.
 
-Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/SKILL.md). This page specifies how the playbook coordinates its review records and delivery.
+Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/SKILL.md). The playbook adds package-level acceptance around that work.
 
-## Separate the responsibilities
+## Review responsibilities
 
-The coordinator selects the supported angle, assigns section jobs, integrates findings and makes actual revisions. Use fresh reviewers separate from the writer when available. Give each the brief, current artifacts and source locations without an expected approval.
+The coordinator selects the supported angle, assigns section jobs, integrates findings and actually revises the text. Use fresh reviewers separate from the writer. Give them the brief, current files and relevant sources without an expected approval.
 
-| Review lane | Required work | Useful finding |
+| Lane | Required work | Useful finding |
 | --- | --- | --- |
-| Readability | Read each requested language as a complete article; reconstruct the argument from the lead and headings, then inspect transitions, explanation and voice | A quoted passage, the reader difficulty it creates, and a concrete repair |
-| Source and meaning | Open the evidence behind material claims; check measures, dates, actors, attribution, conditions and cross-language consistency | The claim, source locator, supported scope and correction required |
-| Overall and delivery | Reconcile revisions, scope, lengths, versions, exports and requested media; inspect the actual rendered or played artifact as applicable | The affected file, observed mismatch or missing check, and its delivery consequence |
+| Readability | Read each language as an article; reconstruct its argument and inspect transitions, explanation and voice | Exact passage, reader difficulty and concrete repair |
+| Source | Open evidence behind material claims; check measures, dates, roles, attribution, conditions and cross-language meaning | Claim, precise source support and necessary correction |
+| Overall | Reconcile revisions, scope, lengths, versions, exports and requested media; inspect the delivered forms | Affected file, observed mismatch or missing check and its consequence |
 
-Different lanes are responsibilities, not fictional people. If fresh agents are unavailable, record separate passes under the real reviewer identity and identify the limited independence. Do not invent reviewers or claim the core's independent-review requirement passed.
+These are responsibilities, not invented people. If independent agents or reviewers are unavailable, record the limitation and deliver a limited-review draft. Repeated self-review does not satisfy the independent-review requirement.
 
-## Record findings against actual files
+## Bind decisions to the current work
 
-Use the [feedback record](../templates/editor-feedback.md). Each review names the artifact and its actual SHA-256, reviewer identity, lane, decision, findings and unresolved items. Keep the observations concrete: “the second heading repeats the conclusion without advancing it” is actionable; “make it more human” is not a completed diagnosis.
+Use the [feedback record](../templates/editor-feedback.md) for substantive observations and the machine-readable records for acceptance. Name the real reviewer, exact artifact hash, review time, findings and unresolved issues.
 
-After edits, affected lanes review changed substance and its consequences. Other lanes inspect the difference before renewing a decision. No approval carries over by merely replacing an old hash. Regenerate derived files and preserve superseded decisions separately from the active review record.
+After edits, affected lanes recheck the substance and consequences. Other lanes inspect the difference before renewing a decision. Replacing an old hash in an approval without reviewing the new bytes is not renewed review. Keep superseded decisions separately.
 
-After two unsuccessful repairs of the same issue, change the approach or disclose the precise unresolved issue and its effect. Do not repeat cosmetic rewrites and report a new success each time.
+After two unsuccessful repairs of the same issue, change the approach or disclose the precise remaining issue. Do not repeat cosmetic rewrites and describe each one as a successful improvement.
 
-## Verify the forms readers will receive
+## Check what the audience receives
 
-- Count length using the recorded convention. Report actual counts; do not pad a draft with repeated conclusions to hit a target.
-- Inspect document rendering when page count or layout matters. A successful file write does not show that its pages are readable.
-- Compare canonical text with requested exports. Check encoding, headings, links, source notes and visible text. A browser HTML check is not a publishing-platform preview.
-- Use the [media checks](MEDIA.md) for actual audio or video. Do not report a listening or playback check that did not occur.
-- Check timeliness against the run's cutoff and source access. A source's event date, publication date and latest-status date can differ.
+- Count using the selected convention. Inspect actual document pages where the target is expressed in pages.
+- Compare deliverables with their audited canonical articles. Check encoding, headings, visible text, links and source notes.
+- Preserve meaningful uncertainty, attribution and date distinctions while improving readability.
+- Complete the [media checks](MEDIA.md) on the actual exported audio and video. Record full listening honestly.
+- Synchronize transcripts, storyboards and subtitles after changing audio or the final timeline.
+- Treat local rendering and destination-platform previews as distinct checks.
 
-The core's [deterministic checker](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/references/manifest-contract.md) checks declared records, hashes, lengths and export consistency. Report its result separately from the reviewers' semantic findings. It cannot determine that a source truly supports a claim or that the prose reads well.
+Targets marked advisory produce a warning outside the suggested range. Strict requirements belong in a custom preset with required enforcement. Neither repeated prose nor fabricated measurements are acceptable ways to meet a target.
 
-## Reduce repeated editing through evidence
+## Understand the two checks
 
-When an editor revises a passage, capture what changed and why. Promote a recurring preference into a scoped rule only when the evidence supports that generalization: specify the language, channel, audience and example where it applies. Keep a one-off factual correction in the current run. Do not blend unrelated authors' preferences into a shared voice.
+The core checker verifies article records, exact claim quotations, declared source access, current review hashes, counts and canonical TXT/HTML consistency. It does not itself open evidence or judge the prose.
 
-Assess a workflow change on comparable tasks. Record major factual repairs, structural revisions, passages the editor rewrote, elapsed editing time when measured, and direct reader feedback when collected. A favorable response to one draft is useful feedback, not proof of broad improvement or time saved. Public examples should be synthetic or explicitly cleared for public use.
+The playbook's delivery checker verifies the selected package, file integrity, required output records, canonical associations, review attestations and related audio versions. It reruns the locked core checker instead of trusting a saved success report. It cannot prove that a named reviewer actually read a source or listened to an audio file.
 
-## State delivery readiness accurately
+Keep these limits visible in the [acceptance report](DELIVERY-CONTRACT.md). `semantic_verification_performed: false` describes the script, even when real independent reviewers have performed semantic review and recorded it.
 
-Use separate fields for drafting, agent review, any required human/organization review, media checks and publication. Complete routine editorial judgments within the authorized task; do not return a generic requirement for someone to polish every paragraph. Escalate only a consequential unresolved purpose, indispensable missing access/evidence or an applicable approval that is genuinely absent.
+## Learn from edits
 
-The handoff should name the requested deliverables, versions, source cutoff and actual completed checks. State any remaining issue in terms of its effect on use. Sending, publishing and changing access require the user's applicable authorization and are not implied by a quality pass.
+Capture what an editor changed and why. Adopt a recurring preference as a scoped rule with a language, channel, audience and example. Keep one-off factual corrections in the run. Do not blend different authors' preferences into a shared voice.
+
+Evaluate changes on comparable tasks using actual factual repairs, structural rewrites, editing effort and reader feedback. A favorable response to one draft is useful evidence, not proof of broad effectiveness. Public examples should be synthetic or explicitly cleared.
+
+## Hand over accurately
+
+Complete routine editorial decisions within the task. Escalate a consequential unresolved purpose, indispensable evidence/access or genuinely missing required authorization rather than returning a generic request for someone to “humanize” every paragraph.
+
+A ready package satisfies the file and recorded-check contract. Human or organization approval, when actually required, has its own state and current package binding. Sending and publication remain separate authorized actions.

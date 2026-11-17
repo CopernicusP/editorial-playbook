@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "name": "evidence-to-article",
+  "version": "0.2.0",
+  "repository": "CopernicusP/evidence-to-article",
+  "commit": "ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc",
+  "files": {
+    "LICENSE": "65bc48c23516f8c8ae2a4444065fef2d633527c429a22d4a95a75dd8ae8f8cd8",
+    "skills/evidence-to-article/SKILL.md": "e1406c81e3a4ce9c2be22050ea4b16bd187fd907f8c221dd3102775a92df35dd",
+    "skills/evidence-to-article/references/authorial-voice.md": "a79f2605f5a9cb6453ac04237c3d1f611c82c34fa7aad60a5a626abde61bf704",
+    "skills/evidence-to-article/references/channels.md": "da0c3b526945b05f5c4f87f55549dcda80ff64f9c76bce5396bc56485280fd96",
+    "skills/evidence-to-article/references/editorial-decisions.md": "52f98cdbfd8b453ea587df2637ccaf7590530ee881a537e5649bff7f9e477f32",
+    "skills/evidence-to-article/references/manifest-contract.md": "92ea87aa518c0b3a7d3bd9ed74b857491201fc9bfd13047c03b09baa555857eb",
+    "skills/evidence-to-article/references/style-cards.md": "883ea401fc724a3df8c3cf7703a0e0334f40f5eafe9d5b943f37488202296ee1",
+    "skills/evidence-to-article/scripts/build_outputs.py": "5f0ca5f3e876cf30aa01411151a05a46eee2b1ff184c81188208fb140dbebc76",
+    "skills/evidence-to-article/scripts/check_run.py": "05544130c57743a88fc0c3d8d75ac4b7612c4edb8adda0132f49da5f75734171"
+  }
+}

@@ -1,83 +1,76 @@
 # Editorial Playbook
 
-从选题或已有研究，到可读的中文文章、英文 Blog，以及按需制作的播客和视频。
+从主题或已有研究开始，按一套明确的交付要求完成中英文文章，以及按需制作的播客和视频。
 
-An open editorial workflow powered by **[Evidence to Article](https://github.com/CopernicusP/evidence-to-article)**. This playbook organizes research, channel requirements, production and handoff. Evidence to Article provides the reusable writing and review core.
+Editorial Playbook coordinates research, production and handoff using **[Evidence to Article](https://github.com/CopernicusP/evidence-to-article)** as its writing and review core. The bundled preset contains general bilingual financial-editorial requirements, without company branding, private accounts or internal source material.
 
-Version **0.1.0** · [Start the workflow](skills/editorial-playbook/SKILL.md) · [Example profile](profiles/example.json) · [MIT license](LICENSE)
+Version **0.2.0** · [Start here](docs/START-HERE.md) · [Workflow skill](skills/editorial-playbook/SKILL.md) · [Delivery preset](skills/editorial-playbook/references/presets/bilingual-finance.json) · [MIT license](LICENSE)
 
-## Two ways to start
+## Start with one request
 
-| Input | What the agent does |
-| --- | --- |
-| A topic and intended reader | Defines the research question, opens sources, builds an evidence packet, then writes and reviews requested outputs |
-| Existing research or a source packet | Checks sources, dates and material gaps, then adapts the evidence into requested channels |
-
-You do not have to supply a finished research report. Topic-only work needs a research-capable agent with access to the relevant sources. Existing drafts and editorial comments can also be supplied for revision.
-
-This is an agent-executed playbook. It does not run a background service, supply accounts or API keys, or guarantee one-click media generation. Available tools determine which steps the agent can complete.
-
-## Use it
-
-Give an agent the [workflow skill](skills/editorial-playbook/SKILL.md) URL and ask it to read the linked documents, or install that folder through your agent's supported skill mechanism. It also needs access to the [pinned writing core](https://github.com/CopernicusP/evidence-to-article/tree/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc). A standalone skill installation reads this repository's documents online; use a full checkout if you need a local snapshot.
-
-Copy one of these requests and fill in the brackets:
+Give your agent the [workflow skill](skills/editorial-playbook/SKILL.md) and use this prompt. It accepts a topic, an existing research packet, or a draft with comments.
 
 ```text
-Use editorial-playbook.
-Topic: [the question to investigate]
-Audience and purpose: [who needs to understand what]
-Evidence cutoff: [date]
-Outputs: Chinese article TXT + HTML and English blog DOCX.
-Length and voice: [requirements, or use labeled example defaults]
-Research the topic, verify the evidence, write each language independently,
-and obtain separate readability, source accuracy and delivery reviews.
-Save drafts and review records to [authorized destination].
+使用 editorial-playbook 的 bilingual-finance 预设。
+输入：[主题，或附上已有研究／待修改稿件]
+读者与核心问题：[谁需要弄清什么]
+资料截至：[日期]
+交付包：articles
+工作与交付位置：[允许保存资料的位置]
+
+请加载指定版本的 Evidence to Article，先检查所需工具和资料权限。
+如果只有主题，先做研究；如果已有研究，先核验并补查实质缺口。
+独立撰写中文和英文，完成可读性、来源准确性和整体交付审阅，
+根据具体问题修订，并逐项验收交付文件。
+中文采用有依据的个人判断，避免机械翻译、反问式小标题和多余加粗。
+请说明实际完成、未完成和受阻的部分，不把未执行的检查写成通过。
 ```
 
-```text
-使用 editorial-playbook，把附件研究改编成中文公众号阅读稿和英文 Blog。
-读者：[受众]；主要想讲清楚：[问题]；资料截至：[日期]。
-篇幅与格式：[要求]。中文希望有依据、有个人判断，读起来像自然的中文文章。
-先核验已有研究，补查实质缺口，再写作、独立复核并修订。
-本次只要文章；交到：[位置]。
-```
+Choose `articles`, `podcast`, or `video`. The bundled media preset uses English audio from Google NotebookLM or Google Gemini TTS; specify which product and provide authorized assets. For video, specify the aspect ratio. Use a custom preset for other provider or language requirements. Existing research can be reused as the research deliverable once it meets the selected requirements; the workflow does not require needless regeneration.
 
-For a podcast, add language, duration, chosen provider and whether intro/outro count toward the target. Request video separately with its aspect ratio. Provider access, authorized source material and actual media checks are needed before a finished MP3 or MP4 can be reported.
+## Select a delivery package
 
-## What can be delivered
+Packages are cumulative. The [preset](skills/editorial-playbook/references/presets/bilingual-finance.json) is the machine-readable source for exact roles, formats, checks and targets.
 
-| Channel | Deliverables when requested | Completion evidence |
-| --- | --- | --- |
-| Research | Report, source list and claim ledger | Sources actually accessed; unresolved claims identified |
-| English blog | Article and requested DOCX/TXT/HTML exports | Independent reviews, actual count and document preview |
-| Chinese article | Native Chinese article, TXT and matching HTML | Shared evidence, readable structure, matching visible content |
-| Podcast | Recording script, MP3 and transcript of that track | Provider record, final audio check, measured duration and transcript alignment |
-| Video | Timecoded storyboard, visual assets and MP4 | Final timeline, readable visuals, audio/video inspection |
-
-Outputs are selected per run. A script is not a finished audio file, and a local preview is not a publication-platform preview. The delivery record distinguishes completed work, blocked steps and any required publication approval.
-
-## Where each part belongs
-
-| Layer | Responsibility |
+| Package | Requested deliverables |
 | --- | --- |
-| [Evidence to Article](https://github.com/CopernicusP/evidence-to-article) | Evidence-grounded composition, authorial voice, language adaptation, independent review and export/audit utilities |
-| Editorial Playbook | Topic/research routing, editable channel profiles, media production and delivery records |
-| Your organization profile | Audience, terminology, house style, approved samples and actual approval requirements |
-| Your private run folder | Sources, drafts, media, comments, review records and deliverables |
+| `articles` | English research document, English blog, Chinese article TXT and HTML, and claim ledger |
+| `podcast` | All article deliverables, plus an English recording script, MP3 and transcript of the finished audio |
+| `video` | All podcast deliverables, plus a timecoded storyboard, visual-asset archive and MP4 |
 
-The core is pinned to **v0.2.0**, commit `ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc`. Its helpers do not automatically load or enforce this profile. An agent reads and applies it. Keep reusable writing improvements in the core rather than copying a second engine here.
+The preset suggests 15–20 research pages, 2–3 English blog body pages, 2,000–3,000 Chinese body Han characters and approximately 10 minutes of audio including bookends. These are editable targets. A page target requires an actual render; it cannot be inferred from word count. Use a custom preset when the brief calls for a different scope or strict bounds.
 
-## Customize
+The bundled Chinese HTML requirement includes a preview in the chosen publishing editor. A local HTML preview alone leaves that check incomplete.
 
-Start with [profiles/example.json](profiles/example.json). Lengths are editable suggestions, not universal rules or a claim about any organization's requirements. A real brief takes precedence. The example selects grounded personal voice for Chinese explanation: show a supported judgment without inventing an interview, visit or personal experience.
+## What the executable workflow adds
 
-Follow [the workflow](docs/WORKFLOW.md), [review and handoff guide](docs/QUALITY.md) and [media guide](docs/MEDIA.md). Store reusable feedback as concrete examples and revision reasons in a private profile; do not rely on a shared chat remembering everyone's preferences.
+- **Prepare a run:** load the selected preset, retrieve or reuse the pinned core, verify its file hashes, create the delivery checklist and report declared tool availability.
+- **Perform the work:** the host agent conducts research, writes, delegates review, exports documents and uses authorized media services.
+- **Check delivery:** invoke the verified Evidence to Article checker and validate the selected package's files, current hashes, required review records and related audio/text versions.
 
-## Contribute
+The Python commands prepare and audit the work. They do not generate articles themselves, provide a speech service, certify factual truth or publish content. Missing capabilities remain visible instead of being turned into a successful completion.
 
-Open an issue with a non-confidential example, the intended reader, output and specific passage or step that failed. Synthetic examples are welcome. Do not submit private source documents, account configuration, client drafts or internal feedback.
+See [Start here](docs/START-HERE.md) for the commands and [the delivery contract](docs/DELIVERY-CONTRACT.md) for exact records and statuses.
 
-This initial release does not establish a measured reduction in editing time. Evaluate multiple runs: track factual corrections, structural rewrites, reader feedback and editing effort.
+## Responsibilities and capabilities
 
-If the workflow is useful, consider starring the main **[Evidence to Article](https://github.com/CopernicusP/evidence-to-article)** project. Improvements to its writing core benefit all adapters.
+| Component | Responsibility |
+| --- | --- |
+| [Evidence to Article](https://github.com/CopernicusP/evidence-to-article) | Composition, grounded authorial voice, independent editorial review, canonical exports and core audit |
+| Editorial Playbook | Preset selection, verified dependency loading, capability preparation and package acceptance |
+| Host agent and connected tools | Research access, code execution, document rendering, independent reviewers and requested media production |
+| Private run folder | Actual sources, drafts, comments, media, checks and deliverables |
+
+A text-only AI can use the writing instructions, but cannot claim to have run scripts or generated files it cannot produce. Full packages require the capabilities listed in [Start here](docs/START-HERE.md). Support is capability-dependent; this repository does not promise identical execution in every AI product.
+
+The core remains pinned to **v0.2.0**, commit `ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc`. The [dependency lock](skills/editorial-playbook/references/engine-lock.json) identifies the exact source files. This repository does not maintain a second copy of the writing engine.
+
+## Customize and contribute
+
+Copy the bundled preset into an authorized private location, adjust its delivery requirements and provide it with `--preset`. Keep private organization rules, samples, account details and production runs outside this public repository. The older [example profile](profiles/example.json) remains an instructional example; it is not the runtime preset schema.
+
+A useful issue includes non-confidential input, the intended reader, the actual output or command result, and the precise failure. Use synthetic examples unless real material is cleared for public use. Track factual corrections, structural rewrites and actual editing effort when evaluating improvements.
+
+See the [validation record and test instructions](docs/VALIDATION.md) for the actual exercised scope and remaining limitations.
+
+No usage telemetry or automatic starring is included. If the workflow helps your work, consider starring the main **[Evidence to Article](https://github.com/CopernicusP/evidence-to-article)** project.

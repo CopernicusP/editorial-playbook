@@ -1,57 +1,51 @@
-# From a topic or research packet to a publication package
+# From a topic or research packet to a delivery package
 
-This playbook coordinates an agent's work. It does not deploy a scheduler, create service accounts, or guarantee unattended production. The reusable writing and evidence rules live in [Evidence to Article v0.2.0](https://github.com/CopernicusP/evidence-to-article/tree/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc).
+The playbook prepares and audits a run; the host agent performs research, writing and production. Use [Start here](START-HERE.md) to select the preset and package. The writing and evidence methods remain in [Evidence to Article v0.2.0](https://github.com/CopernicusP/evidence-to-article/tree/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc).
 
-## 1. Establish one run
+## 1. Prepare the current task
 
-Copy the [episode brief](../templates/episode-brief.md) into a private working location outside this public repository. Read the current request, supplied material and selected profile. The [example profile](../profiles/example.json) is an editable starting point, not an organization's policy. Record the actual profile version and core commit used.
+Read the request, supplied material and applicable feedback. Establish the audience, central question, source cutoff and authorized working location. Select `articles`, `podcast` or `video` and any justified preset override. Run preparation when the host can execute Python, then read the resulting `RUN.md`, preset snapshot and preflight report.
 
-Choose the input route:
+Keep sources and actual outputs in the private run folder. The prepared records begin pending; setup does not create approvals. Record unavailable evidence or tools precisely while continuing independent work that can be completed.
 
-| Input | Work to perform | First useful output |
-| --- | --- | --- |
-| Topic only | Define a reader question, research primary sources, reconcile findings and record gaps | Research packet with source locators and a claim ledger |
-| Existing research | Read the packet, identify its cutoff and verification history, check material gaps and current status where relevant | Adaptation-ready claim ledger |
-| Draft plus feedback | Read the latest draft and accessible comments; distinguish factual corrections from voice preferences | Revision plan tied to passages, followed by a repaired draft |
+| Input | Work to perform |
+| --- | --- |
+| Topic | Define a research question, open original sources, reconcile findings and build the evidence packet |
+| Existing research | Read the packet, inspect its cutoff and source support, investigate material gaps, and reuse sound work |
+| Draft and feedback | Read the latest text and accessible comments, identify passage-level changes, then revise |
 
-For topic-only work, use the [research brief](../templates/research-brief.md). A brief defines research; it is not a completed report. For existing research, preserve useful work and investigate material gaps instead of silently commissioning another report. An inherited verification label does not establish that a source was read in this run.
-
-Select only the requested channels. Agree or infer reasonable length targets and record the assumption. A page target requires a chosen page layout and inspection of the rendered file; a word or character count cannot substitute for it. Record whether an audio duration target includes its introduction and closing.
+A [research brief](../templates/research-brief.md) defines the work and is not a research report. An inherited “verified” label does not establish that a source was read in this run.
 
 ## 2. Build the evidence packet
 
-Use the [claim ledger](../templates/claim-ledger.md) to connect material statements to specific source locations. Prioritize original records for the facts driving the argument. Record publication dates separately from event dates and data cutoffs. Resolve contradictions by checking, narrowing or omitting the affected assertion, preserving uncertainty that changes the conclusion.
+Use the [claim ledger](../templates/claim-ledger.md) to connect material claims to precise source locations. Distinguish publication dates, event dates and data cutoffs. Resolve contradictions by checking, narrowing or omitting claims; preserve uncertainty and counterevidence that change the conclusion.
 
-The packet should give a writer enough information to explain the subject without inventing connective facts: the central question, relevant chronology, actors and roles, supported findings, calculations where needed, counterevidence and unresolved gaps. A bibliography alone is not that packet. Keep full evidence and access records in the authorized working location.
+The packet should include the question, relevant chronology, actors and roles, supported findings, calculations where useful and unresolved gaps. A bibliography alone is not that packet. For an existing research input, adapt or export it only as needed to meet the selected research-deliverable requirements.
 
-## 3. Compose the requested channels
+## 3. Compose through the core
 
-Invoke the pinned [core workflow](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/SKILL.md) with the brief, claim ledger and current sources. Use the [article request](../templates/article-request.md) as a compact handoff.
+Read the actual local core entry shown in `RUN.md` and its relevant references. Give the writer the brief, selected preset, evidence packet and current claim ledger. The [article request](../templates/article-request.md) provides a compact handoff.
 
-Chinese and English share factual commitments but need not share section order, metaphors or paragraph boundaries. Compose each for its audience using the core's [channel guidance](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/references/channels.md). The Chinese article should stand on its own as a readable explanation. The English blog should select a clear argument rather than summarize every section of the research packet.
+Compose Chinese and English independently from shared factual commitments. Their section order and paragraph boundaries may differ. Use the core's [channel guidance](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/references/channels.md) and the preset's selected voice.
 
-When a more personal voice is selected, apply the core's [grounded authorial voice](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/references/authorial-voice.md). Evidence may support a visible editorial judgment; it cannot supply a fictional memory, interview or emotion. Do not force first person into every paragraph or transfer a blog preference to a research report automatically.
+For a personal explanatory voice, apply [grounded authorial judgment](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/references/authorial-voice.md). Show which evidence deserves attention and why without inventing a memory, interview or experience. Chinese headings should carry concrete statements and advance the argument; emphasis should help the reader locate meaning.
 
-A podcast script is a listening adaptation with its own sequence and pronunciation notes. Actual generated audio needs a separate content check. Follow [media production](MEDIA.md) only when audio or video is requested and the required services and inputs are available.
+For podcast or video packages, follow [media production](MEDIA.md). The recording script and transcript of the finished audio serve different purposes. New assertions introduced by generated speech need evidence checks.
 
 ## 4. Review, repair and export
 
-Use the three independent review responsibilities in [quality and handoff](QUALITY.md). Reviewers receive the actual current artifacts and evidence, not an expected verdict. The coordinating agent resolves specific findings and produces the revision. A vague instruction to add “human polish” does not finish the editorial work.
+Use the independent responsibilities in [quality review](QUALITY.md). Reviewers receive the actual brief, current files and source locations without an expected verdict. The coordinator resolves their specific findings and writes the revision.
 
-After substantive repair, review the affected content again and bind decisions to the current artifact hashes. Preserve revisions as `V1`, `V2` or `Draft`; record readiness separately from filenames.
+Keep V1/V2/Draft versions. Bind review decisions to the actual current hashes. A substantive edit requires renewed review of affected content, and other lanes inspect the difference before renewing their status.
 
-Lock one canonical text per language and derive requested text and HTML exports from it. The core's TXT helper preserves Markdown syntax; select and verify another renderer when a plain-text house layout is required. Inspect actual DOCX/PDF pages when those formats are requested. Read the core's [output contract](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/references/manifest-contract.md) before using its helpers or checker. Its v0.2.0 checker expects TXT and HTML companions for each canonical article; keep those internal if they are not requested delivery formats. Machine checks supplement source reading and editorial review.
+Lock a canonical Markdown article per language and prepare the core manifest. The core checker requires matching TXT and HTML companions for each article, even when those exports remain internal. Its TXT helper preserves Markdown syntax; where the reader-facing TXT needs plain text, use and verify a suitable renderer and retain the core companions separately. The delivered document and its audited canonical article must remain linked.
 
-## 5. Hand over the package
+Inspect actual DOCX pages for page counts and layout. Check visible text and links in HTML. Report a destination-platform preview only when performed there. Record audio duration and full listening on the final file, then synchronize transcript and video records after any edit.
 
-Deliver only the requested files, with their version, source cutoff, completed checks and concrete remaining gaps. Keep research, source records and review history available in the authorized archive. Publication, messaging and changes to sharing follow the user's applicable authorization; drafting permission alone does not grant those actions.
+## 5. Accept and hand over
 
-| Channel | Reader-facing deliverables | Working records |
-| --- | --- | --- |
-| Research | Report if requested | Sources, calculations, gaps and claim ledger |
-| English blog | Requested document or web/text formats | Canonical text and review records |
-| Chinese reading article | Requested TXT, HTML or document formats | Canonical text and format checks |
-| Podcast | Finished audio if generated and checked | Recording script, actual audio transcript and provenance |
-| Video | Finished video if produced and checked | Timecoded storyboard, permitted assets and timeline records |
+Complete `delivery.json` with the real file locations, hashes, authors and checks. Run `check_delivery.py` as described in [Start here](START-HERE.md). It invokes the verified core checker and evaluates the selected package's delivery requirements.
 
-An unavailable media service should result in a precise status and the completed text work, not a mislabeled audio deliverable. Record organization approval and publication separately from agent review whenever those stages apply.
+The [acceptance report](DELIVERY-CONTRACT.md) distinguishes incomplete work, blocked tasks, required changes, pending approval and readiness for handoff. Fix specific problems and rerun the check; do not rename a draft to imply completion.
+
+Deliver the requested package with its version, evidence cutoff, completed checks and remaining limitations. Keep research and review history in the authorized archive. Publication, messaging and changes to sharing require the user's applicable authorization and remain separate from an acceptance pass.

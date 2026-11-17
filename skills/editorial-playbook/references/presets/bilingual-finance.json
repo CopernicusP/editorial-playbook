@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "id": "bilingual-finance",
+  "version": "1.0.0",
+  "description": "Unbranded finance editorial delivery preset. Editable operating targets; no organization affiliation or approval is implied.",
+  "packages": {
+    "articles": [
+      "research_en",
+      "blog_en",
+      "article_zh_txt",
+      "article_zh_html",
+      "claim_ledger"
+    ],
+    "podcast": [
+      "research_en",
+      "blog_en",
+      "article_zh_txt",
+      "article_zh_html",
+      "claim_ledger",
+      "podcast_script_en",
+      "audio_mp3",
+      "audio_transcript_en"
+    ],
+    "video": [
+      "research_en",
+      "blog_en",
+      "article_zh_txt",
+      "article_zh_html",
+      "claim_ledger",
+      "podcast_script_en",
+      "audio_mp3",
+      "audio_transcript_en",
+      "storyboard_en",
+      "visual_assets",
+      "video_mp4"
+    ]
+  },
+  "deliverables": {
+    "research_en": {
+      "path": "outputs/Research_EN_V1.docx",
+      "format": "docx",
+      "checks": [
+        "source_review",
+        "document_render",
+        "format_review"
+      ],
+      "target": {
+        "metric": "rendered_pages",
+        "min": 15,
+        "max": 20,
+        "enforcement": "advisory"
+      }
+    },
+    "blog_en": {
+      "path": "outputs/Blog_EN_V1.docx",
+      "format": "docx",
+      "canonical_language": "en",
+      "checks": [
+        "document_render",
+        "output_consistency",
+        "format_review"
+      ],
+      "target": {
+        "metric": "rendered_pages",
+        "min": 2,
+        "max": 3,
+        "enforcement": "advisory"
+      }
+    },
+    "article_zh_txt": {
+      "path": "outputs/Article_ZH_V1.txt",
+      "format": "txt",
+      "canonical_language": "zh",
+      "checks": [
+        "output_consistency",
+        "format_review"
+      ],
+      "target": {
+        "metric": "body_Han_characters",
+        "min": 2000,
+        "max": 3000,
+        "enforcement": "advisory"
+      }
+    },
+    "article_zh_html": {
+      "path": "outputs/Article_ZH_V1.html",
+      "format": "html",
+      "canonical_language": "zh",
+      "checks": [
+        "output_consistency",
+        "format_review",
+        "platform_preview"
+      ]
+    },
+    "claim_ledger": {
+      "path": "evidence/Claim_Ledger_V1.md",
+      "format": "md",
+      "checks": [
+        "source_review"
+      ]
+    },
+    "podcast_script_en": {
+      "path": "outputs/Podcast_Script_EN_V1.docx",
+      "format": "docx",
+      "checks": [
+        "source_review",
+        "readability",
+        "document_render"
+      ]
+    },
+    "audio_mp3": {
+      "path": "outputs/Podcast_Audio_EN_V1.mp3",
+      "format": "mp3",
+      "checks": [
+        "provider_provenance",
+        "audio_content",
+        "full_listening",
+        "media_duration"
+      ],
+      "allowed_providers": [
+        "google_notebooklm",
+        "google_gemini_tts"
+      ],
+      "target": {
+        "metric": "duration_seconds",
+        "min": 540,
+        "max": 660,
+        "enforcement": "advisory"
+      }
+    },
+    "audio_transcript_en": {
+      "path": "outputs/Podcast_Transcript_EN_V1.txt",
+      "format": "txt",
+      "checks": [
+        "transcript_alignment",
+        "source_review"
+      ]
+    },
+    "storyboard_en": {
+      "path": "outputs/Video_Storyboard_EN_V1.txt",
+      "format": "txt",
+      "checks": [
+        "storyboard_timing",
+        "format_review"
+      ]
+    },
+    "visual_assets": {
+      "path": "outputs/Visual_Assets_V1.zip",
+      "format": "zip",
+      "checks": [
+        "visual_review",
+        "asset_rights"
+      ]
+    },
+    "video_mp4": {
+      "path": "outputs/Video_EN_V1.mp4",
+      "format": "mp4",
+      "checks": [
+        "video_sync",
+        "full_playback",
+        "format_review"
+      ]
+    }
+  },
+  "capabilities": {
+    "common": [
+      "source_access",
+      "independent_review",
+      "document_rendering",
+      "platform_preview"
+    ],
+    "podcast": [
+      "audio_generation",
+      "audio_review"
+    ],
+    "video": [
+      "audio_generation",
+      "audio_review",
+      "video_editing",
+      "video_review"
+    ]
+  },
+  "editorial": {
+    "research": "Reuse valid supplied research; for a topic, research primary evidence first. A research brief is not a completed report.",
+    "blog_en": "Compose a focused argument in English. Body page target excludes supporting source notes; record layout and actual preview.",
+    "article_zh": "Native Chinese composition; grounded personal judgment supported by evidence; specific declarative subheadings; restrained emphasis.",
+    "zh_components": [
+      "title",
+      "subtitle",
+      "declarative_subheadings",
+      "complete_body",
+      "source_list",
+      "appropriate_disclaimer",
+      "captions_if_used"
+    ],
+    "fact_invariants": [
+      "entities_and_roles",
+      "dates_and_cutoff",
+      "amount_object_unit_currency_denominator_period",
+      "attribution",
+      "legal_status",
+      "conditions_negation_uncertainty",
+      "causal_strength"
+    ],
+    "format": "UTF-8 text and static HTML, no external resources or JavaScript. Compare visible content with the reviewed canonical text and preview in the chosen publishing editor.",
+    "han_count": "Use the core's explicit body-Han convention; headings and the Sources/参考来源 section are excluded. Put any disclaimer outside the body-count scope and report this convention.",
+    "media": "English podcast; target total includes authorized intro/outro. Select actual Google product per run. No source audio, no verified provider claim. Generate video only for the video package.",
+    "review": "Separate readability, source and overall review. All current article hashes must be reviewed; record limitations honestly.",
+    "lengths": "Targets are advisory until an explicit brief makes them required; report measured values and deviations. Never pad to reach a target.",
+    "filenames": "Use V1, V2 or Draft. Version delivery status separately.",
+    "approval": "The preset does not require or grant publication approval. Configure the actual organization's approval requirement in delivery.json."
+  },
+  "privacy": "Keep actual sources, drafts, accounts, organization rules and media outside the public repository."
+}

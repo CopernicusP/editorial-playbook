@@ -1,4 +1,6 @@
 interface:
-  display_name: "Editorial Playbook"
-  short_description: "Research-to-publication workflow with independent review"
-  default_prompt: "Use $editorial-playbook to turn my topic or research into reviewed Chinese and English articles and any requested media."
+  display_name: Editorial Playbook
+  short_description: Prepare, write and check bilingual editorial packages
+  default_prompt: Use $editorial-playbook with the bilingual-finance preset to prepare
+    my requested article or media package, load Evidence to Article and check every
+    deliverable.
