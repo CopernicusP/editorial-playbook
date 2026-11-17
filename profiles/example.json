@@ -1,0 +1,61 @@
+{
+  "profile_schema_version": 1,
+  "id": "bilingual-explainer-example",
+  "version": "0.1.0",
+  "purpose": "Editable public example, not organization policy or a machine-enforced schema",
+  "engine": {
+    "name": "evidence-to-article",
+    "version": "0.2.0",
+    "public_repository": "CopernicusP/evidence-to-article",
+    "source_commit": "ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc"
+  },
+  "execution": {
+    "mode": "agent_reads_and_applies_profile",
+    "input_modes": ["topic", "existing_research", "draft_revision"],
+    "current_task_overrides_examples": true,
+    "run_location": "separate_authorized_private_folder",
+    "external_actions": "require_applicable_user_authorization"
+  },
+  "channels": {
+    "research_en": {
+      "enabled": "when_requested_or_needed_for_topic_research",
+      "length": "scope_driven; specify_a_page_target_in_the_brief_if_needed",
+      "artifacts": ["research_report", "source_list", "claim_ledger"]
+    },
+    "blog_en": {
+      "enabled": "when_requested",
+      "voice": "clear_explanatory",
+      "suggested_length": {"min": 2, "max": 3, "unit": "actual_rendered_body_pages", "excludes": ["source_notes"], "strict_gate": false},
+      "formats": ["docx_or_requested_equivalent"]
+    },
+    "article_zh": {
+      "enabled": "when_requested",
+      "voice": "grounded_personal",
+      "suggested_length": {"min": 2000, "max": 3000, "unit": "body_Han_characters", "excludes": ["titles", "subheadings", "sources", "disclaimer"], "strict_gate": false},
+      "headings": "specific_declarative_subheadings",
+      "formats": ["utf8_txt", "static_html"],
+      "html": {"external_resources": false, "javascript": false, "target_platform_preview": "record_only_if_performed"}
+    },
+    "podcast": {
+      "enabled": "only_when_requested",
+      "language": "set_in_brief",
+      "provider": "set_in_brief; no_silent_substitution",
+      "suggested_duration": {"minutes": 10, "includes_intro_outro": true, "strict_gate": false},
+      "artifacts": ["recording_script", "finished_mp3", "transcript_of_finished_track"]
+    },
+    "video": {
+      "enabled": "only_when_requested",
+      "aspect_ratio": "set_in_brief",
+      "artifacts": ["timecoded_storyboard", "visual_assets", "finished_mp4"]
+    }
+  },
+  "review": {
+    "lanes": ["readability", "source", "overall"],
+    "writer_self_approval_is_independent": false,
+    "bind_to": "sha256_of_actual_reviewed_artifacts",
+    "after_edits": "affected_reviewers_recheck; other_reviewers_inspect_changes_before_renewing_status",
+    "unavailable_independence": "record_limitation",
+    "publication_approval": "separate_from_agent_review; apply_actual_requirements_only"
+  },
+  "delivery": {"filename_suffix": "V1_or_V2_or_Draft", "status": "record_separately", "report_actual_counts_and_gaps": true}
+}

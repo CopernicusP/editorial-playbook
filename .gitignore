@@ -1,0 +1,12 @@
+/runs/
+/private/
+/outputs/
+/profiles/local*.json
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+__pycache__/
+*.pyc
+.DS_Store

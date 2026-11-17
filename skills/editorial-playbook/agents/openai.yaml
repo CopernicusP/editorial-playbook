@@ -1,0 +1,4 @@
+interface:
+  display_name: "Editorial Playbook"
+  short_description: "Research-to-publication workflow with independent review"
+  default_prompt: "Use $editorial-playbook to turn my topic or research into reviewed Chinese and English articles and any requested media."
