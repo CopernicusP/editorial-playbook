@@ -1,6 +1,6 @@
 # From a topic or research packet to a delivery package
 
-The playbook prepares and audits a run; the host agent performs research, writing and production. Use [Start here](START-HERE.md) to select the preset and package. The writing and evidence methods remain in [Evidence to Article v0.3.0](https://github.com/CopernicusP/evidence-to-article/tree/064f31c978860ecbb8c9c2162900e82568946c7e).
+The playbook prepares and audits a run; the host agent performs research, writing and production. Use [Start here](START-HERE.md) to select the preset and package. The writing and evidence methods remain in [Evidence to Article v0.3.1](https://github.com/CopernicusP/evidence-to-article/tree/a6899a5a2793407bb43b916e3d7893cc589d91b7).
 
 ## 1. Prepare the current task
 
@@ -26,15 +26,15 @@ The packet should include the question, relevant chronology, actors and roles, s
 
 Read the actual local core entry shown in `RUN.md` and its relevant references. Give the writer the brief, selected preset, evidence packet and current claim ledger. The [article request](../templates/article-request.md) provides a compact handoff.
 
-Compose Chinese and English independently from shared factual commitments. Their section order and paragraph boundaries may differ. Use the core's [channel guidance](https://github.com/CopernicusP/evidence-to-article/blob/064f31c978860ecbb8c9c2162900e82568946c7e/skills/evidence-to-article/references/channels.md) and the preset's selected voice.
+Compose Chinese and English independently from shared factual commitments. Their section order and paragraph boundaries may differ. Use the core's [channel guidance](https://github.com/CopernicusP/evidence-to-article/blob/a6899a5a2793407bb43b916e3d7893cc589d91b7/skills/evidence-to-article/references/channels.md) and the preset's selected voice.
 
-For a personal explanatory voice, apply [grounded authorial judgment](https://github.com/CopernicusP/evidence-to-article/blob/064f31c978860ecbb8c9c2162900e82568946c7e/skills/evidence-to-article/references/authorial-voice.md). Show which evidence deserves attention and why without inventing a memory, interview or experience. Chinese headings should carry concrete statements and advance the argument; emphasis should help the reader locate meaning.
+For a personal explanatory voice, apply [grounded authorial judgment](https://github.com/CopernicusP/evidence-to-article/blob/a6899a5a2793407bb43b916e3d7893cc589d91b7/skills/evidence-to-article/references/authorial-voice.md). Show which evidence deserves attention and why without inventing a memory, interview or experience. Chinese headings should carry concrete statements and advance the argument; emphasis should help the reader locate meaning.
 
 For podcast or video packages, follow [media production](MEDIA.md). The recording script and transcript of the finished audio serve different purposes. New assertions introduced by generated speech need evidence checks.
 
 ## 4. Review, repair and export
 
-Use the independent responsibilities in [quality review](QUALITY.md). Reviewers receive the actual brief, current files and source locations without an expected verdict. The coordinator resolves their specific findings and writes the revision.
+Use the independent responsibilities in [quality review](QUALITY.md). For an unaided teach-back, start a separate reviewer with the article and audience description alone. Give other reviewers the relevant brief, current files and source locations without an expected verdict. The coordinator resolves their specific findings and writes the revision.
 
 Keep V1/V2/Draft versions and bind each decision to the actual current hash. After one writer integrates repairs, affected specialists recheck the changed passages, and the others inspect the difference before renewing their decisions. A fresh reviewer reads the integrated article end to end. If that article changes, repeat the affected checks and the final read.
 

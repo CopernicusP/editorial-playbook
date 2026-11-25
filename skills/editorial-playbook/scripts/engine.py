@@ -145,7 +145,7 @@ def fetch_or_copy_engine(destination, lock, source=None, offline=False):
             data = safe_relative_path(source, relative).read_bytes()
         else:
             url = "https://raw.githubusercontent.com/{}/{}/{}".format(REPOSITORY, lock["commit"], relative)
-            req = Request(url, headers={"User-Agent": "editorial-playbook/0.3.0"})
+            req = Request(url, headers={"User-Agent": "editorial-playbook/0.3.1"})
             with opener.open(req, timeout=15) as response:
                 if response.geturl() != url:
                     raise ValueError("Dependency response URL differs from the locked URL")

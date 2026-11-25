@@ -144,7 +144,7 @@ class RuntimeContractTests(unittest.TestCase):
             "id": "article-en", "kind": "article", "path": "article-en.md", "language": "en",
             "author_id": "synthetic-writer", "sha256": article_hash,
             "expected_body_count": {"min": 1, "max": 100},
-            "required_criteria": ["readability", "source_meaning", "delivery", "reader_implications", "closing_synthesis"],
+            "required_criteria": ["readability", "source_meaning", "delivery", "reader_implications", "reader_teachback", "closing_synthesis"],
             "inapplicable_criteria": {"number_relevance": "No quantitative comparison in this software fixture.",
                                      "comment_closure": "The synthetic brief supplied no comments."},
         }]
@@ -155,7 +155,7 @@ class RuntimeContractTests(unittest.TestCase):
                               "author_id": "synthetic-writer", "sha256": digest(path.read_bytes()),
                               "canonical_id": "article-en"})
         lanes = {"readability": "readability", "source_meaning": "source", "delivery": "overall",
-                 "reader_implications": "readability", "closing_synthesis": "readability", "holistic": "overall"}
+                 "reader_implications": "readability", "reader_teachback": "readability", "closing_synthesis": "readability", "holistic": "overall"}
         reviews = []
         for criterion, lane in lanes.items():
             record = {"id": "test-" + criterion, "lane": lane, "criterion": criterion,
@@ -371,6 +371,23 @@ class RuntimeContractTests(unittest.TestCase):
         manifest["artifacts"][0]["inapplicable_criteria"].pop("number_relevance")
         write_json(self.run / "core-manifest.json", manifest)
         self.assertNotReady(self.check(), "number_relevance")
+
+    def test_reader_teachback_requires_its_own_specialist_or_a_scoped_reason(self):
+        self.complete_run()
+        manifest = read_json(self.run / "core-manifest.json")
+        teachback = next(review for review in manifest["reviews"] if review["criterion"] == "reader_teachback")
+        teachback["reviewer_id"] = "synthetic-reviewer-readability"
+        write_json(self.run / "core-manifest.json", manifest)
+        self.assertNotReady(self.check(), "independence")
+
+        article = manifest["artifacts"][0]
+        article["required_criteria"].remove("reader_teachback")
+        manifest["reviews"].remove(teachback)
+        write_json(self.run / "core-manifest.json", manifest)
+        self.assertNotReady(self.check(), "reader_teachback")
+        article["inapplicable_criteria"]["reader_teachback"] = "The synthetic routine opening notice introduces no new mechanism."
+        write_json(self.run / "core-manifest.json", manifest)
+        self.assertReady()
 
     def test_fresh_whole_article_review_is_required(self):
         self.complete_run()

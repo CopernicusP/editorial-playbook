@@ -23,7 +23,9 @@ MAX_TEXT = 32 * 1024 * 1024
 DIGEST = re.compile(r"[0-9a-f]{64}\Z")
 STATES = ("changes_required", "blocked", "incomplete", "approval_pending")
 REQUIRED_ARTICLE_CRITERIA = {"readability", "source_meaning", "delivery"}
-SCOPED_ARTICLE_CRITERIA = {"number_relevance", "reader_implications", "closing_synthesis", "comment_closure"}
+SCOPED_ARTICLE_CRITERIA = {
+    "number_relevance", "reader_implications", "reader_teachback", "closing_synthesis", "comment_closure",
+}
 SCOPE = (
     "Checks files, dependency integrity, a freshly executed Evidence to Article "
     "audit, and declared review attestations. It does not read sources, judge "

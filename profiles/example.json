@@ -1,13 +1,13 @@
 {
   "profile_schema_version": 1,
   "id": "bilingual-explainer-example",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "purpose": "Editable public example, not organization policy or a machine-enforced schema",
   "engine": {
     "name": "evidence-to-article",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "public_repository": "CopernicusP/evidence-to-article",
-    "source_commit": "064f31c978860ecbb8c9c2162900e82568946c7e"
+    "source_commit": "a6899a5a2793407bb43b916e3d7893cc589d91b7"
   },
   "execution": {
     "mode": "agent_reads_and_applies_profile",
@@ -51,7 +51,7 @@
   },
   "review": {
     "required_criteria": ["readability", "source_meaning", "delivery"],
-    "scope_per_article": ["number_relevance", "reader_implications", "closing_synthesis", "comment_closure"],
+    "scope_per_article": ["number_relevance", "reader_implications", "reader_teachback", "closing_synthesis", "comment_closure"],
     "reviewer_assignment": "one_distinct_reviewer_per_applicable_criterion_then_a_fresh_whole_article_reader",
     "writer_self_approval_is_independent": false,
     "bind_to": "sha256_of_actual_reviewed_artifacts",

@@ -2,23 +2,24 @@
 
 Review should locate and repair failures a reader or listener would encounter. Fluency, an AI-detector score and checklist completion do not establish accuracy or usefulness.
 
-Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/064f31c978860ecbb8c9c2162900e82568946c7e/skills/evidence-to-article/SKILL.md). The playbook adds package-level acceptance around that work.
+Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/a6899a5a2793407bb43b916e3d7893cc589d91b7/skills/evidence-to-article/SKILL.md). The playbook adds package-level acceptance around that work.
 
 ## Review responsibilities
 
-Give each applicable criterion to a different independent reviewer. A lane groups related work in the core manifest. Two criteria in the same lane still need different reviewers. Supply the current article, original brief and relevant evidence without earlier verdicts. A specialist may review the same criterion in both languages. Keep the criterion tied to each article and preserve each reviewer's independence across the whole assignment.
+Give each applicable criterion to a different independent reviewer. A lane groups related work in the core manifest. Two criteria in the same lane still need different reviewers. Supply each specialist with the inputs needed for their test. The cold reader first sees only the article and a description of the intended audience. Give the other specialists the relevant original brief and evidence. Withhold prior verdicts. A specialist may review the same criterion in both languages. Keep the criterion tied to each article and preserve each reviewer's independence across the whole assignment.
 
 | Criterion | Question for its reviewer |
 | --- | --- |
 | Prose and readability | Where would the intended reader lose the thread? Quote the passage, explain the difficulty and identify a concrete repair. |
 | Source fidelity | Does the actual source support each material claim, including its units, period, denominator, attribution and uncertainty? |
-| Numerical evidence choice | Which figure answers the reader's question? Identify decorative or redundant numbers, any missing comparison and how the choice changes the inference. A correct number can still be a poor choice. |
-| Reader implications | Name the reader or stakeholder. What decision, cost, constraint or reasonable expectation changes for that person? Mark any effect the evidence leaves uncertain. |
+| Numerical evidence choice | Which figures establish scale, proportions, timing, obligations or a consequential comparison? Flag distracting figures and any cut that would leave the reader unable to judge magnitude or tradeoffs. Explain what inference each retained figure supports. |
+| Reader implications | What changes for the intended reader? When several parties are involved, trace what each contributes, gains, gives up or remains exposed to. Attribute a stated purpose to its source and label plausible incentives as inference. |
+| Reader teach-back | With only the article and the audience description, explain who does what, how one step leads to the next and why the result matters. If a step depends on unexplained knowledge, quote the first such passage. Record the actual retelling before consulting the source packet. |
 | Closing synthesis | State the question raised by the opening, then quote the ending's answer. Look for a supported conclusion, any condition that limits it and any gap between question and answer. |
 | Comment closure | Trace each accessible comment ID and original anchor to its revised passage. Record what was fixed, deliberately retained or remains open, and why. |
 | Delivery | Compare the actual exports with the reviewed text. Inspect the requested format, render, length and media where applicable. |
 
-For example, a synthetic notice says a town pool will open a week later than scheduled and gives its total visitor count last summer. The source reviewer can verify both figures. The numerical-evidence reviewer decides which helps a family arranging lessons. The reader-implications reviewer checks whether a postponement of lessons follows from the notice. Record an agent's reading as an editorial judgment. Claim direct reader feedback only when someone in that audience actually gave it.
+For example, a synthetic notice says a town pool will open a week later than scheduled and gives its total visitor count last summer. The source reviewer can verify both figures. The numerical-evidence reviewer decides which helps a family arranging lessons. The reader-implications reviewer checks whether a postponement of lessons follows from the notice. Record an agent's reading as an editorial judgment. Claim direct reader feedback only when someone in that audience actually gave it. For a new unaided test after a revision, use a reader who has not seen the answer key. If an actual reader still cannot explain a passage, ask one targeted question such as “What did you think would happen after this step?” Use their answer to locate the missing explanation. If no answer is available, keep the uncertainty visible and continue evidence-supported repairs.
 
 ## Integrate and review the delivered version
 

@@ -4,7 +4,7 @@
 
 Editorial Playbook coordinates research, production and handoff using **[Evidence to Article](https://github.com/CopernicusP/evidence-to-article)** as its writing and review core. The bundled preset contains general bilingual financial-editorial requirements, without company branding, private accounts or internal source material.
 
-Version **0.3.0** · [Start here](docs/START-HERE.md) · [Workflow skill](skills/editorial-playbook/SKILL.md) · [Delivery preset](skills/editorial-playbook/references/presets/bilingual-finance.json) · [MIT license](LICENSE)
+Version **0.3.1** · [Start here](docs/START-HERE.md) · [Workflow skill](skills/editorial-playbook/SKILL.md) · [Delivery preset](skills/editorial-playbook/references/presets/bilingual-finance.json) · [MIT license](LICENSE)
 
 ## Start with one request
 
@@ -21,7 +21,8 @@ Give your agent the [workflow skill](skills/editorial-playbook/SKILL.md) and use
 请加载指定版本的 Evidence to Article，先检查所需工具和资料权限。
 如果只有主题，先做研究；如果已有研究，先核验并补查实质缺口。
 独立撰写中文和英文，每项适用标准交给一位不同的独立审稿人。分别核查文笔、事实和交付，
-以及数字是否值得保留、对目标读者有何影响、结尾是否回答开篇和批注是否逐条落实。
+以及哪些数字能说明规模或取舍、各方得到什么又承担什么、结尾是否回答开篇、批注是否落实。
+如果有陌生的背景，请单独安排一位审稿人先只读正文和读者说明，复述其中的机制，指出在哪一步读不懂。
 由一位主笔整合，相关审稿人复核改稿后，再请一位未参与的审稿人通读全文。
 若再改稿，复核受影响的项目并重新通读，最后逐项验收交付文件。
 中文采用有依据的个人判断，避免机械翻译、反问式小标题和多余加粗。
@@ -65,7 +66,7 @@ See [Start here](docs/START-HERE.md) for the commands and [the delivery contract
 
 A text-only AI can use the writing instructions, but cannot claim to have run scripts or generated files it cannot produce. Full packages require the capabilities listed in [Start here](docs/START-HERE.md). Support is capability-dependent; this repository does not promise identical execution in every AI product.
 
-The core is pinned to **v0.3.0**, commit `064f31c978860ecbb8c9c2162900e82568946c7e`. The [dependency lock](skills/editorial-playbook/references/engine-lock.json) identifies the exact source files. This repository does not maintain a second copy of the writing engine.
+The core is pinned to **v0.3.1**, commit `a6899a5a2793407bb43b916e3d7893cc589d91b7`. The [dependency lock](skills/editorial-playbook/references/engine-lock.json) identifies the exact source files. This repository does not maintain a second copy of the writing engine.
 
 ## Customize and contribute
 

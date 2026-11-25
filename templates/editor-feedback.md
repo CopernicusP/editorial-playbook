@@ -10,6 +10,7 @@ Complete this only for work actually performed. Keep private passages, identitie
 - For direct reader feedback, identify the person and the observation actually obtained
 - Review date:
 - Brief, sources and other material actually read:
+- For reader teach-back, record the unaided retelling and the first unclear term or missing step. If a real reader supplied follow-up, record their question or response in their own words:
 - Decision: changes requested / approved / limited review
 
 ## Findings and repairs

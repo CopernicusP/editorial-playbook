@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "bilingual-finance",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Unbranded finance editorial delivery preset. Editable operating targets; no organization affiliation or approval is implied.",
   "packages": {
     "articles": [
@@ -205,7 +205,7 @@
     "format": "UTF-8 text and static HTML, no external resources or JavaScript. Compare visible content with the reviewed canonical text and preview in the chosen publishing editor.",
     "han_count": "Use the core's explicit body-Han convention; headings and the Sources/参考来源 section are excluded. Put any disclaimer outside the body-count scope and report this convention.",
     "media": "English podcast; target total includes authorized intro/outro. Select actual Google product per run. No source audio, no verified provider claim. Generate video only for the video package.",
-    "review": "Use the schema-2 article contract. Assign one independent reviewer per applicable criterion: prose, source fidelity, delivery, numerical evidence choice, reader consequences, ending and comment closure. One writer integrates. Affected reviewers recheck the final version before a fresh reviewer reads the whole article. Renew checks after edits.",
+    "review": "Use the schema-2 article contract. Assign one independent reviewer per applicable criterion: prose, source fidelity, delivery, numerical evidence choice, reader consequences, unaided reader teach-back when background is unfamiliar, ending and comment closure. One writer integrates. Affected reviewers recheck the final version before a fresh reviewer reads the whole article. Renew checks after edits.",
     "lengths": "Targets are advisory until an explicit brief makes them required; report measured values and deviations. Never pad to reach a target.",
     "filenames": "Use V1, V2 or Draft. Version delivery status separately.",
     "approval": "The preset does not require or grant publication approval. Configure the actual organization's approval requirement in delivery.json."

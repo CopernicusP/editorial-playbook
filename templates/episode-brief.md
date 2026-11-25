@@ -5,7 +5,7 @@ Copy this template to the private run location. Replace placeholders with curren
 - Run ID and date:
 - Input route: topic / existing research / draft and feedback
 - Source packet or latest draft, version and actual access:
-- Reader and intended use:
+- Reader, intended use, and which concepts they already know or need introduced:
 - Central question:
 - Source cutoff and event period:
 - Profile location and version:
