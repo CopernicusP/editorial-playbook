@@ -2,7 +2,7 @@
 
 Review should locate and repair failures a reader or listener would encounter. Fluency, an AI-detector score and checklist completion do not establish accuracy or usefulness.
 
-Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/a6899a5a2793407bb43b916e3d7893cc589d91b7/skills/evidence-to-article/SKILL.md). The playbook adds package-level acceptance around that work.
+Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/81ff2d1a15cbc9e2cf2cfb1c3baf2c14a5747153/skills/evidence-to-article/SKILL.md). The playbook adds package-level acceptance around that work.
 
 ## Review responsibilities
 
@@ -16,6 +16,7 @@ Give each applicable criterion to a different independent reviewer. A lane group
 | Reader implications | What changes for the intended reader? When several parties are involved, trace what each contributes, gains, gives up or remains exposed to. Attribute a stated purpose to its source and label plausible incentives as inference. |
 | Reader teach-back | With only the article and the audience description, explain who does what, how one step leads to the next and why the result matters. If a step depends on unexplained knowledge, quote the first such passage. Record the actual retelling before consulting the source packet. |
 | Closing synthesis | State the question raised by the opening, then quote the ending's answer. Look for a supported conclusion, any condition that limits it and any gap between question and answer. |
+| Revision continuity | Compare the agreed brief and prior fixes to the exact current text. Where a comparison was commissioned, identify both source endpoints, what changed or held, and why the difference matters. Quote each required passage and record the source of any superseding decision. |
 | Comment closure | Trace each accessible comment ID and original anchor to its revised passage. Record what was fixed, deliberately retained or remains open, and why. |
 | Delivery | Compare the actual exports with the reviewed text. Inspect the requested format, render, length and media where applicable. |
 

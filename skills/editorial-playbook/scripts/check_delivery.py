@@ -16,6 +16,7 @@ import sys
 import zipfile
 
 from engine import load_lock, verify_engine
+from prepare_run import active_page_targets
 
 
 MAX_JSON = 16 * 1024 * 1024
@@ -186,7 +187,84 @@ def validate_article_criteria(artifact):
         raise ValueError(identifier + " has unaccounted article criteria: " + ", ".join(sorted(missing)))
 
 
-def audit(run_dir):
+def bound_revision(base, run, manifest, expected_digest, required):
+    binding = run.get("revision_plan")
+    block = manifest.get("cumulative_revision")
+    path = safe_path(base, "revision-plan.json")
+    if binding is None and block is None and not path.exists() and expected_digest is None and not required:
+        return None, []
+    if not isinstance(binding, dict) or binding.get("plan_path") != "revision-plan.json":
+        raise ValueError("Cumulative revision requires the revision plan frozen at preparation")
+    actual = digest(path)
+    if (actual != binding.get("plan_sha256") or expected_digest is not None and actual != expected_digest
+            or not isinstance(block, dict) or actual != block.get("plan_sha256") or block.get("plan_path") != binding["plan_path"]):
+        raise ValueError("Cumulative revision binding differs from the frozen revision plan")
+    checks = block.get("checks")
+    if not isinstance(checks, dict):
+        raise ValueError("Cumulative revision requires current checks")
+    for check in checks.values():
+        if isinstance(check, dict) and "body_render" in check:
+            render = check["body_render"]
+            if not isinstance(render, dict):
+                raise ValueError("Invalid revision body render")
+            for name in ("delivery_path", "render_path"):
+                safe_path(base, render.get(name))
+    return block, active_page_targets(read_object(path))
+
+
+def pdf_page_count(render):
+    reader = shutil.which("pdfinfo")
+    if reader:
+        process = subprocess.run([reader, str(render)], capture_output=True, text=True, timeout=20,
+                                 env={**os.environ, "LC_ALL": "C"})
+        pages = re.search(r"^Pages:\s+(\d+)\s*$", process.stdout, re.MULTILINE)
+        if process.returncode or not pages:
+            raise ValueError("Cannot read the physical page count of the current PDF render")
+        return int(pages.group(1))
+    try:
+        from pypdf import PdfReader
+        from pypdf.errors import PdfReadError
+    except ImportError as exc:
+        raise RuntimeError("Physical page count requires pdfinfo or pypdf for this body-length check") from exc
+    try:
+        return len(PdfReader(render).pages)
+    except PdfReadError as exc:
+        raise ValueError("Cannot read the physical page count of the current PDF render") from exc
+
+
+def body_measurement(base, requirement, block, item, file_hash):
+    role = requirement["page_range"]["delivery_role"]
+    check = block["checks"].get(requirement["id"], {})
+    evidence = check.get("body_render") if isinstance(check, dict) else None
+    if not isinstance(evidence, dict) or not isinstance(item, dict):
+        raise ValueError("Missing final delivery or body render for " + role)
+    if (item.get("canonical_id") != requirement.get("article_id") or item.get("path") != evidence.get("delivery_path")
+            or evidence.get("delivery_sha256") != file_hash or not file_hash):
+        raise ValueError("Body measurement must use the current selected delivery for " + role)
+    render = safe_path(base, evidence.get("render_path"))
+    render_hash = digest(render)
+    if render_hash != evidence.get("render_sha256"):
+        raise ValueError("Body-page evidence is stale for the current PDF render")
+    if item["path"].lower().endswith(".pdf"):
+        if render_hash != file_hash:
+            raise ValueError("A delivered PDF must be measured from its own bytes")
+    else:
+        checks = item.get("checks")
+        if not isinstance(checks, list) or not any(
+                isinstance(record, dict) and record.get("kind") == "document_render" and record.get("status") == "pass"
+                and record.get("artifact_sha256") == file_hash and record.get("render_sha256") == render_hash
+                for record in checks):
+            raise ValueError("DOCX document_render must bind the delivered bytes to the inspected PDF via render_sha256")
+    fractions = evidence.get("body_page_fractions")
+    if not isinstance(fractions, list) or not fractions or any(not number(n) or not 0 <= n <= 1 for n in fractions):
+        raise ValueError("Each physical page needs its occupied body fraction")
+    if pdf_page_count(render) != len(fractions):
+        raise ValueError("Body-page evidence must cover every physical page of the current PDF render")
+    return {"metric": "body_page_equivalents", "value": math.fsum(fractions), "physical_pages": len(fractions),
+            "body_page_fractions": fractions, "render_sha256": evidence["render_sha256"]}
+
+
+def audit(run_dir, expected_plan_sha256=None, require_cumulative=False):
     issues, items_report = [], []
     result = {"schema_version": 1, "ok": False, "status": "incomplete",
               "semantic_verification_performed": False, "scope": SCOPE,
@@ -282,6 +360,7 @@ def audit(run_dir):
         issue("run_schema", str(exc))
         return finish()
 
+    revision, page_targets = None, []
     canonical, core_reviews, article_writers, engine_ok = {}, [], set(), False
     try:
         lock = load_lock()
@@ -297,6 +376,7 @@ def audit(run_dir):
             raise ValueError("This release requires a schema-2 core manifest for criterion-level and fresh final reviews")
         if not isinstance(core_manifest.get("reviews"), list):
             raise ValueError("core manifest reviews must be a list")
+        revision, page_targets = bound_revision(base, run, core_manifest, expected_plan_sha256, require_cumulative)
         core_reviews = core_manifest["reviews"]
         if nonblank(core_manifest.get("integrator_id")):
             article_writers.add(core_manifest["integrator_id"])
@@ -332,7 +412,10 @@ def audit(run_dir):
             environment = os.environ.copy()
             environment.pop("PYTHONPATH", None)
             environment.pop("PYTHONHOME", None)
-            proc = subprocess.run([sys.executable, "-B", "-E", "-s", str(script), "--manifest", str(manifest_path)],
+            command = [sys.executable, "-B", "-E", "-s", str(script), "--manifest", str(manifest_path)]
+            if revision is not None:
+                command.append("--require-cumulative")
+            proc = subprocess.run(command,
                                   cwd=str(script.parent), env=environment, capture_output=True,
                                   text=True, timeout=45)
             core_report = json.loads(proc.stdout)
@@ -398,6 +481,22 @@ def audit(run_dir):
             row["format_check"] = inspections[role]
         except (OSError, ValueError, TypeError, KeyError, zipfile.BadZipFile, subprocess.TimeoutExpired) as exc:
             issue("file_format", str(exc), role=role)
+
+    body_measurements = {}
+    if (result.get("core_audit") or {}).get("ok") and revision is not None:
+        for requirement in page_targets:
+            role = requirement["page_range"]["delivery_role"]
+            try:
+                if role not in required or descriptors[role]["format"] not in ("docx", "pdf"):
+                    raise ValueError("Body-page target does not identify a selected DOCX or PDF")
+                measurement = body_measurement(base, requirement, revision, indexed.get(role), hashes.get(role))
+                if role in body_measurements and measurement != body_measurements[role]:
+                    raise ValueError("Conflicting measurements for the same delivered document")
+                body_measurements[role] = measurement
+            except RuntimeError as exc:
+                issue("body_render", str(exc), "blocked", role)
+            except (OSError, ValueError, TypeError, subprocess.TimeoutExpired) as exc:
+                issue("body_render", str(exc), role=role)
 
     # Keep the same specialist's remit across languages, adaptations and media.
     editorial_assignments = {}
@@ -490,6 +589,12 @@ def audit(run_dir):
             if audio_bound and ("audio_mp3" not in hashes or related.get("audio_mp3") != hashes["audio_mp3"]):
                 issue("media_alignment", kind + " must bind the current audio_mp3 hash.", role=role)
         target = descriptor.get("target")
+        if role in body_measurements:
+            row = next(row for row in items_report if row["role"] == role)
+            row["body_measurement"] = body_measurements[role]
+            if target and target["metric"] == "rendered_pages":
+                row["measurement"] = body_measurements[role]
+                target = None
         if target:
             metric = target["metric"]
             value = None
@@ -543,9 +648,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", required=True, type=Path)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--require-cumulative", action="store_true", help="Reject a run without its cumulative revision plan")
+    parser.add_argument("--expected-plan-sha256", help="Require this independently retained plan digest")
     args = parser.parse_args()
     try:
-        report = audit(args.run_dir)
+        report = audit(args.run_dir, args.expected_plan_sha256, args.require_cumulative)
     except (OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
         report = {"schema_version": 1, "ok": False, "status": "changes_required",
                   "semantic_verification_performed": False, "scope": SCOPE,

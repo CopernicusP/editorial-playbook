@@ -103,6 +103,33 @@ def validate_preset(profile):
     return profile
 
 
+def active_page_targets(plan):
+    """Read current render targets. The pinned core validates the full plan at acceptance."""
+    rounds = plan.get("rounds")
+    if not isinstance(rounds, list) or not rounds:
+        raise ValueError("Revision plan requires source-located requirements organized in rounds")
+    active = {}
+    for stage in rounds:
+        if not isinstance(stage, dict) or not isinstance(stage.get("requirements"), list):
+            raise ValueError("Each revision round requires a requirements list")
+        for requirement in stage["requirements"]:
+            if not isinstance(requirement, dict) or not isinstance(requirement.get("id"), str):
+                raise ValueError("Each revision requirement needs an ID")
+            superseded = requirement.get("supersedes", [])
+            if not isinstance(superseded, list) or any(not isinstance(key, str) for key in superseded):
+                raise ValueError("Supersedes must list earlier requirement IDs")
+            for key in superseded:
+                active.pop(key, None)
+            if "page_range" in requirement:
+                target = requirement["page_range"]
+                if (not isinstance(target, dict) or not isinstance(target.get("delivery_role"), str)
+                        or any(type(target.get(key)) not in (int, float) or not math.isfinite(target[key])
+                               for key in ("min", "max")) or not 0 < target["min"] <= target["max"]):
+                    raise ValueError("A body-page range requires a delivery_role and finite, ordered bounds")
+                active[requirement["id"]] = requirement
+    return list(active.values())
+
+
 def load_capabilities(path=None):
     supplied = read_object(path, "Capabilities") if path is not None else {}
     if set(supplied) - set(CAPABILITIES):
@@ -191,6 +218,23 @@ def prepare(args):
             "delivery_manifest": "delivery.json",
             "engine": {key: lock[key] for key in ("name", "version", "repository", "commit")},
         }
+        manifest = {"schema_version": 2, "integrator_id": None, "artifacts": [], "sources": [], "claims": [], "reviews": []}
+        page_targets = []
+        plan_file = "revision-plan.json"
+        if args.revision_plan is not None:
+            if args.revision_plan.is_symlink() or not args.revision_plan.is_file() or args.revision_plan.stat().st_size > 2 * 1024 * 1024:
+                raise ValueError("Revision plan must be a regular JSON file smaller than 2 MiB")
+            snapshot = staging / plan_file
+            shutil.copyfile(args.revision_plan, snapshot)
+            plan = read_object(snapshot, "Revision plan")
+            page_targets = active_page_targets(plan)
+            for requirement in page_targets:
+                role = requirement["page_range"]["delivery_role"]
+                if role not in profile["packages"][args.package] or profile["deliverables"][role]["format"] not in ("docx", "pdf"):
+                    raise ValueError("Body-page target requires a selected DOCX or PDF delivery role: " + role)
+            plan_binding = {"plan_path": plan_file, "plan_sha256": digest(snapshot.read_bytes())}
+            run["revision_plan"] = plan_binding
+            manifest["cumulative_revision"] = {**plan_binding, "checks": {}}
         write_json(staging / "run.json", run)
         items = [{"role": role, "path": profile["deliverables"][role]["path"], "status": "pending",
                   "sha256": None, "author_id": None, "canonical_id": None, "checks": []}
@@ -203,7 +247,7 @@ def prepare(args):
             "items": items,
             "approval": {"required": False, "status": "not_requested", "reviewer_id": None, "evidence": None},
         })
-        write_json(staging / "core-manifest.json", {"schema_version": 2, "integrator_id": None, "artifacts": [], "sources": [], "claims": [], "reviews": []})
+        write_json(staging / "core-manifest.json", manifest)
         write_json(staging / "capabilities.json", capabilities)
         report = preflight(capabilities, profile, args.package, engine_result)
         write_json(staging / "preflight.json", report)
@@ -214,6 +258,7 @@ def prepare(args):
 Preparation only: no research, article, audio, video, review or publication has been completed.
 
 - Read `run.json`, `profile.json` and `preflight.json` for this run's scope and gaps.
+- For a revision, reconstruct the commission and accepted changes through the latest instructions. Compare the supplied versions by their contents and provenance. Carry forward each active requirement, including any requested comparison. Record the location and reason for a superseding decision.
 - Read the verified core entry: `{core_skill}`. Follow its local relative references.
 - Use the schema-2 `core-manifest.json` and the verified core's `references/manifest-contract.md`. Identify the one writer who integrates the run in `integrator_id`. Declare each article's `required_criteria` before assigning reviewers.
 - Include `readability`, `source_meaning` and `delivery`. Scope `number_relevance`, `reader_implications`, `reader_teachback`, `closing_synthesis` and `comment_closure`; put a concrete reason for each inapplicable one in that article's `inapplicable_criteria` object. Add further criteria from the brief.
@@ -235,19 +280,33 @@ From this run directory, export the actual canonical articles and check their co
 ```bash
 python3 -B .engine/skills/evidence-to-article/scripts/build_outputs.py --input article-zh.md --out-dir audit
 python3 -B .engine/skills/evidence-to-article/scripts/build_outputs.py --input article-en.md --out-dir audit
-python3 -B .engine/skills/evidence-to-article/scripts/check_run.py --manifest core-manifest.json
+python3 -B .engine/skills/evidence-to-article/scripts/check_run.py --manifest core-manifest.json{cumulative_flag}
 ```
 
 Use `-B` for every direct core execution, including when following commands in the core's own documentation. It prevents Python from creating `__pycache__` inside the strictly verified `.engine` cache. The wrapper checker uses `-B` itself. If an earlier command created cache files, inspect them before removing only those generated cache files, or prepare a fresh run with the verified source. Never delete arbitrary dependency files or modify the lock to bypass an integrity failure. Setup does not automatically clean an existing run.
-""".format(core_skill=core_skill, checks=checks)
+""".format(core_skill=core_skill, checks=checks, cumulative_flag=" --require-cumulative" if args.revision_plan else "")
+        if args.revision_plan:
+            instructions += (
+                "\n## Cumulative revision\n\n"
+                "Use the frozen `revision-plan.json` and the pinned manifest contract. Give the distinct "
+                "`revision_continuity` reviewer the commission, agreed changes, evidence and current articles. "
+                "Trace every active requirement to an exact current passage. Stage any archived plan and accepted fixes "
+                "at their declared run-relative paths. Bind the specialist and holistic reads to both the plan hash "
+                "and the current checks digest. Measure body-page ranges on the final delivery render, excluding references "
+                "and unused space. A new user instruction changing the plan needs a new run snapshot.\n"
+            )
         instructions += "\n## Requested deliverables\n\n| Role | Path | Target |\n| --- | --- | --- |\n"
         for role in profile["packages"][args.package]:
             item = profile["deliverables"][role]
             target_spec = item.get("target")
             target_text = ("{min}–{max} {metric} ({enforcement})".format(**target_spec)
                            if target_spec else "No numerical target")
+            body_targets = [record["page_range"] for record in page_targets if record["page_range"]["delivery_role"] == role]
+            if body_targets:
+                current = " and ".join("{min}–{max} body-page equivalents".format(**bounds) for bounds in body_targets)
+                target_text = current if not target_spec or target_spec["metric"] == "rendered_pages" else target_text + ", " + current
             instructions += "| {} | `{}` | {} |\n".format(role, item["path"], target_text)
-        instructions += "\nTargets come from the bound profile. Record real measurements and deviations; do not modify the brief just to obtain a pass.\n"
+        instructions += "\nUse the bound preset and any current body-page target in the frozen revision plan. Record real measurements and deviations; do not modify the brief just to obtain a pass.\n"
         (staging / "RUN.md").write_text(instructions, encoding="utf-8")
         if target.exists():
             if target.is_symlink() or not target.is_dir() or any(target.iterdir()):
@@ -270,6 +329,7 @@ def main():
     parser.add_argument("--input-mode", required=True, choices=("topic", "research", "draft"))
     parser.add_argument("--cutoff", required=True)
     parser.add_argument("--package", default="articles", choices=("articles", "podcast", "video"))
+    parser.add_argument("--revision-plan", type=Path, help="Bind the source-located cumulative revision plan to this run")
     parser.add_argument("--preset", type=Path, default=DEFAULT_PRESET)
     parser.add_argument("--capabilities", type=Path)
     parser.add_argument("--engine-source", type=Path)

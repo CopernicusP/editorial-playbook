@@ -5,7 +5,7 @@ description: Run a research-to-publication workflow from a topic or an existing 
 
 # Editorial Playbook
 
-Version: 0.3.1. Use the bundled preparation and acceptance tools to coordinate research, bilingual writing and requested media. Use Evidence to Article v0.3.1 as the writing and article-audit engine. Read [references/run-guide.md](references/run-guide.md) first and [references/routing.md](references/routing.md) for dependency and repository details. The tools prepare and inspect a run; the host agent performs research, writing, review and media production.
+Version: 0.3.2. Use the bundled preparation and acceptance tools to coordinate research, bilingual writing and requested media. Use Evidence to Article v0.3.2 as the writing and article-audit engine. Read [references/run-guide.md](references/run-guide.md) first and [references/routing.md](references/routing.md) for dependency and repository details. The tools prepare and inspect a run; the host agent performs research, writing, review and media production.
 
 ## Establish one run
 
@@ -19,7 +19,8 @@ When code execution is unavailable, read the preset, pinned public core and rele
 
 - For a topic, define the question, scope and evidence needed using the research brief, then conduct research and build the claim ledger. A research brief is not a research report. Record source access and unresolved gaps.
 - For existing research, read it first, check its sources and cutoff, and investigate material gaps. Reuse sound research. A supplied report is an input to verification, not proof that every claim is true.
-- For a draft revision, read the current text and accessible comments before editing. Capture each comment ID, original passage and requested change. Preserve approved material. Locate the final replacement and verify whether it answers the comment. Record retained wording, open items and access gaps with reasons.
+- For a draft revision, reconstruct the original commission, accepted fixes from earlier rounds and the latest instructions using the actual brief, source versions and comments. Filenames and version numbers only help locate those materials. Preserve active scope, requested comparisons, approved content and still-applicable findings. For each replacement, name the instruction that superseded the earlier requirement and its affected deliverable. Apply a later explicit scope or length to that deliverable. Keep the requirement open when its source is unavailable.
+- For cumulative revisions, prepare the run with `--revision-plan` as described in the run guide. Record each active obligation and its source before editing. Give the separate `revision_continuity` reviewer the cumulative brief, relevant source versions and final text. Trace each obligation to an exact current passage and evidence of what was preserved, repaired or superseded. For a commissioned comparison, check both requested endpoints and the meaningful difference or continuity. Anchor comment closure separately where applicable.
 
 ## Write, review and repair
 
@@ -35,7 +36,7 @@ Resolve ordinary choices of angle, wording, section order and endings within the
 
 ## Produce requested formats
 
-Lock canonical text before exports. Derive formats from it, inspect actual renders, and report real counts using the selected convention. The core TXT exporter retains Markdown syntax; use and verify a separate renderer if the destination needs clean plain text. A local HTML preview is not a publication-platform preview. Use V1/V2/Draft filenames and record review/publication status separately.
+Lock canonical text before exports. Derive formats from it, inspect actual renders, and report real counts using the selected convention. The core TXT exporter retains Markdown syntax; use and verify a separate renderer if the destination needs clean plain text. A local HTML preview is not a publication-platform preview. Use the requested filenames and record review status and content identity separately. Where the commission specifies body pages, inspect the final render, record occupied body space on each page and exclude reference-only pages.
 
 For audio or video, read the media guide. Verify the actual provider and source audio; distinguish the recording script from the transcript of the finished track. Check generated additions against the ledger. A completed script does not imply an MP3 exists. Do not silently substitute another provider. Record actual listening, duration, timeline and video inspection; leave unperformed checks unperformed.
 

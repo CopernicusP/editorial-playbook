@@ -24,6 +24,16 @@ Use `--capabilities /path/to/capabilities.json` to pass observations such as `{"
 
 The run contains a preset snapshot, `RUN.md`, empty article-audit manifest, delivery inventory and preflight results. Nothing in an empty inventory is approved. The directory must be new or empty; an existing run is not overwritten.
 
+### Carry a commission through revisions
+
+Use `--revision-plan /path/to/plan.json` whenever the assignment includes earlier agreed changes or a comparison whose endpoints must survive subsequent edits. Choose the input route from the actual materials. A filename or round label cannot establish what was requested or approved.
+
+Before writing, reconstruct the commission, each accepted fix, and the latest instructions. Give each requirement an ID, source location and canonical article ID in the pinned core's `rounds` format (see `references/manifest-contract.md` in the core). A later explicit scope or length replaces an earlier instruction only for the affected output. Name the earlier requirement in `supersedes` and cite the reason. If the commission compares two sources, identify both and the question their comparison must answer. Use `--preset` to select the deliverables actually commissioned.
+
+If an earlier checked plan exists, keep its exact bytes at a run-relative archive path. Bind its path and digest in `previous_plan`, keep its rounds intact and append the new round. A `prior_fix` can identify an archived UTF-8 draft by path, digest and exact quotation. Stage these records at their declared paths in the prepared run. If no earlier plan exists, reconstruct the commission from identifiable instructions and accepted edits, and record any unavailable history.
+
+Preparation copies the original plan bytes to `revision-plan.json` and binds its digest in `run.json` and `core-manifest.json`. Populate `cumulative_revision.checks` with current evidence after the edits. For each active requirement quote the final passage and explain how it satisfies the commission or preserves the accepted repair. Give the continuity specialist and the fresh final reader the agreed plan. Use the core's plan and checks digests to bind their decisions. If scope changes again, prepare a new run from a revised plan and retain the earlier records.
+
 ## 3. Execute the verified core
 
 Read `RUN.md`, then `.engine/skills/evidence-to-article/SKILL.md` and its applicable references. Research the question or verify supplied research; read raw sources, build the claim ledger, compose languages independently. Follow the criterion assignments, rechecks and fresh whole-article review in the core. Read its `references/editorial-decisions.md` and `references/manifest-contract.md`. Use the bundled preset's grounded personal Chinese voice, declarative headings, subtitle, source list and appropriate disclaimer. Keep authorship, dates, numerical meanings, conditions and uncertainty consistent across channels.
@@ -49,6 +59,8 @@ python3 scripts/check_delivery.py --run-dir /path/to/private-run --report /path/
 ```
 
 The checker verifies the locked dependency, runs its article checker anew, and checks required outputs, formats, hashes, measurements and current attestations. It does not call an LLM, perform source research, listen to audio, send messages or publish. Use a fresh report filename on each run; existing report files are not overwritten.
+
+For a cumulative package, the checker requires the prepared plan and invokes the core in cumulative mode. An independent handoff can also supply `--require-cumulative` or `--expected-plan-sha256 <digest-from-preparation>`. When a current plan assigns a body-page range to a delivered document, inspect its final PDF. Record the occupied fraction of the usable body area per physical page, with zero for references. In a DOCX item's `document_render` check include `render_sha256` for the inspected PDF. The checker compares the plan's role, actual delivered bytes, render digest and physical page count using `pdfinfo` or `pypdf`. It reports the sum of the fractions; the reviewer supplies the body-area observations.
 
 Only `ready_for_handoff` exits with code 0. Other outcomes name incomplete work, blocked tasks, changes required or a required approval still pending. Read warnings and reviewer findings even when the record is complete. Human/organization approval is configured only when it actually applies. A successful record check is not factual certification or evidence of publication.
 

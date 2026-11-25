@@ -45,6 +45,8 @@ python3 skills/editorial-playbook/scripts/prepare_run.py \
 
 Use `--input-mode research` for an existing research packet, or `draft` for revision. These values select the route; they do not import or verify an attachment. Place the actual source material in the authorized run location and identify it in the brief.
 
+When the assignment carries earlier decisions forward, prepare it with `--revision-plan /path/to/plan.json` on any input route. Reconstruct the original commission and subsequent instructions, preserving agreed comparisons and fixes unless a later instruction explicitly replaces them. Match the selected outputs and any body-length target to the latest brief. The [run guide](../skills/editorial-playbook/references/run-guide.md#carry-a-commission-through-revisions) covers the plan, supporting files and current evidence.
+
 The command retrieves the files named in the bundled dependency lock and verifies their hashes. It can instead use a repository-layout source cache:
 
 ```bash

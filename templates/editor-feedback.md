@@ -19,6 +19,7 @@ Complete this only for work actually performed. Keep private passages, identitie
 | --- | --- | --- | --- | --- |
 | | | | | |
 
+- For revision continuity, link each active requirement to its source and quote its supporting passage in this version. Record both endpoints for a requested comparison and cite the decision authorizing any supersession.
 - Revised artifact and current hash, if changed:
 - Affected content actually re-reviewed:
 - Whole-article reviewer, reviewed version/hash, start and completion times (when this is the final read):

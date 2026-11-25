@@ -25,6 +25,8 @@ Copy this template to the private run location. Replace placeholders with curren
 ## Inputs and decisions
 
 - Required source material and inaccessible items:
+- Original commission, requested comparison endpoints and source locations:
+- Accepted changes still in force, and any later instruction that supersedes a requirement for this specific deliverable:
 - Supplied feedback and accessible comment anchors:
 - Applicable review criteria per article, with a reason for scoped exclusions:
 - Selected angle and reason:

@@ -4,16 +4,17 @@
 
 Editorial Playbook coordinates research, production and handoff using **[Evidence to Article](https://github.com/CopernicusP/evidence-to-article)** as its writing and review core. The bundled preset contains general bilingual financial-editorial requirements, without company branding, private accounts or internal source material.
 
-Version **0.3.1** · [Start here](docs/START-HERE.md) · [Workflow skill](skills/editorial-playbook/SKILL.md) · [Delivery preset](skills/editorial-playbook/references/presets/bilingual-finance.json) · [MIT license](LICENSE)
+Version **0.3.2** · [Start here](docs/START-HERE.md) · [Workflow skill](skills/editorial-playbook/SKILL.md) · [Delivery preset](skills/editorial-playbook/references/presets/bilingual-finance.json) · [MIT license](LICENSE)
 
 ## Start with one request
 
-Give your agent the [workflow skill](skills/editorial-playbook/SKILL.md) and use this prompt. It accepts a topic, an existing research packet, or a draft with comments.
+Give your agent the [workflow skill](skills/editorial-playbook/SKILL.md) and use this prompt. For a revision across rounds, supply the original assignment, relevant earlier versions and agreed edits as well as the current draft. It accepts a topic, an existing research packet, or a draft with comments.
 
 ```text
 使用 editorial-playbook 的 bilingual-finance 预设。
 输入：[主题，或附上已有研究／待修改稿件]
 读者与核心问题：[谁需要弄清什么]
+多轮改稿：[原始任务、仍有效的要求、已接受的修改、本轮明确取代的要求]
 资料截至：[日期]
 交付包：articles
 工作与交付位置：[允许保存资料的位置]
@@ -66,7 +67,7 @@ See [Start here](docs/START-HERE.md) for the commands and [the delivery contract
 
 A text-only AI can use the writing instructions, but cannot claim to have run scripts or generated files it cannot produce. Full packages require the capabilities listed in [Start here](docs/START-HERE.md). Support is capability-dependent; this repository does not promise identical execution in every AI product.
 
-The core is pinned to **v0.3.1**, commit `a6899a5a2793407bb43b916e3d7893cc589d91b7`. The [dependency lock](skills/editorial-playbook/references/engine-lock.json) identifies the exact source files. This repository does not maintain a second copy of the writing engine.
+The core is pinned to **v0.3.2**, commit `81ff2d1a15cbc9e2cf2cfb1c3baf2c14a5747153`. The [dependency lock](skills/editorial-playbook/references/engine-lock.json) identifies the exact source files. This repository does not maintain a second copy of the writing engine.
 
 ## Customize and contribute
 

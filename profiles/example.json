@@ -1,13 +1,13 @@
 {
   "profile_schema_version": 1,
   "id": "bilingual-explainer-example",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "purpose": "Editable public example, not organization policy or a machine-enforced schema",
   "engine": {
     "name": "evidence-to-article",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "public_repository": "CopernicusP/evidence-to-article",
-    "source_commit": "a6899a5a2793407bb43b916e3d7893cc589d91b7"
+    "source_commit": "81ff2d1a15cbc9e2cf2cfb1c3baf2c14a5747153"
   },
   "execution": {
     "mode": "agent_reads_and_applies_profile",
@@ -52,6 +52,7 @@
   "review": {
     "required_criteria": ["readability", "source_meaning", "delivery"],
     "scope_per_article": ["number_relevance", "reader_implications", "reader_teachback", "closing_synthesis", "comment_closure"],
+    "revision_continuity": "required_on_each_article_affected_by_a_cumulative_commission",
     "reviewer_assignment": "one_distinct_reviewer_per_applicable_criterion_then_a_fresh_whole_article_reader",
     "writer_self_approval_is_independent": false,
     "bind_to": "sha256_of_actual_reviewed_artifacts",
@@ -59,5 +60,5 @@
     "unavailable_independence": "record_limitation",
     "publication_approval": "separate_from_agent_review; apply_actual_requirements_only"
   },
-  "delivery": {"filename_suffix": "V1_or_V2_or_Draft", "status": "record_separately", "report_actual_counts_and_gaps": true}
+  "delivery": {"filename_suffix": "follow_the_current_brief", "status": "record_separately", "report_actual_counts_and_gaps": true}
 }

@@ -21,11 +21,17 @@ Use a new report filename for each saved audit; existing report files are not ov
 | `core-manifest.json` | Canonical articles, their internal TXT/HTML companions, sources, exact claim occurrences, one independent specialist per applicable criterion and a subsequent fresh whole-article review |
 | `delivery.json` | Every requested preset role, its delivered file, current status/hash, required checks and any applicable approval |
 
-Follow the core's [manifest contract](https://github.com/CopernicusP/evidence-to-article/blob/a6899a5a2793407bb43b916e3d7893cc589d91b7/skills/evidence-to-article/references/manifest-contract.md). New packages require schema 2, including scoped criteria, current specialist approvals and the later whole-article review. See the [run guide](../skills/editorial-playbook/references/run-guide.md) for criterion IDs and applicability notes. Use the matching earlier playbook and lock to reproduce an archived run. Keep the core manifest directly in the run directory so its relative artifact paths use the same base. Article deliverables must identify the correct audited canonical article and language. Internal audit exports can remain separate from reader-facing files.
+Follow the core's [manifest contract](https://github.com/CopernicusP/evidence-to-article/blob/81ff2d1a15cbc9e2cf2cfb1c3baf2c14a5747153/skills/evidence-to-article/references/manifest-contract.md). New packages require schema 2, including scoped criteria, current specialist approvals and the later whole-article review. See the [run guide](../skills/editorial-playbook/references/run-guide.md) for criterion IDs and applicability notes. Use the matching earlier playbook and lock to reproduce an archived run. Keep the core manifest directly in the run directory so its relative artifact paths use the same base. Article deliverables must identify the correct audited canonical article and language. Internal audit exports can remain separate from reader-facing files.
 
 Factual packages require nonempty source and claim inventories. Empty inventories keep a package incomplete even where the underlying core reports only a coverage warning.
 
 The generated `profile.json` is bound to the run by its hash. Required roles and checks come from that selected preset, not from whichever entries happen to be present in the delivery record. A missing required file cannot disappear by deleting its checklist row.
+
+## Cumulative revisions
+
+Prepare with `--revision-plan` when a commission spans earlier decisions. The selected package and plan bind the current scope. Each still-active obligation needs a verified check against the current article and an exact quote. The continuity specialist and final reader attest to the plan digest and the digest of the current checks. A change to the plan, final text, render or recorded evidence reopens the affected checks. Follow the [run guide](../skills/editorial-playbook/references/run-guide.md) and the pinned core contract for these records.
+
+For a plan's active `page_range`, `delivery_role` identifies the selected final DOCX or PDF. A current body-page range takes precedence over an older preset page target for that role. Record the final file and PDF render paths and hashes in the core check, and one occupied body fraction per physical page. For a delivered PDF, measure that PDF. For DOCX, the final `document_render` check must bind its `artifact_sha256` to the actual file and `render_sha256` to the PDF inspected. The package checker verifies the physical page count, records the total occupied body-page equivalents and leaves the interpretation of occupied space to the reviewer.
 
 ## Bundled roles and required checks
 

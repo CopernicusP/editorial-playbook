@@ -20,6 +20,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +52,32 @@ def write_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def write_test_pdf(path):
+    """Two actual PDF pages for a synthetic format test. Review attestations remain test data."""
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Count 2 /Kids [3 0 R 4 0 R] >>",
+    ]
+    for stream_id in (5, 6):
+        objects.append(f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 300 400] /Contents {stream_id} 0 R "
+                       "/Resources << /Font << /F1 7 0 R >> >> >>".encode())
+    for label in ("The synthetic library opens at noon.", "References for this synthetic notice."):
+        stream = f"BT /F1 12 Tf 20 350 Td ({label}) Tj ET".encode()
+        objects.append(f"<< /Length {len(stream)} >>\nstream\n".encode() + stream + b"\nendstream")
+    objects.append(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
+    data = bytearray(b"%PDF-1.4\n")
+    offsets = [0]
+    # Construct byte offsets so standard PDF parsers can count actual pages.
+    for index, obj in enumerate(objects, 1):
+        offsets.append(len(data))
+        data.extend(f"{index} 0 obj\n".encode() + obj + b"\nendobj\n")
+    start = len(data)
+    data.extend(f"xref\n0 {len(offsets)}\n0000000000 65535 f \n".encode())
+    data.extend("".join(f"{offset:010} 00000 n \n" for offset in offsets[1:]).encode())
+    data.extend(f"trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{start}\n%%EOF\n".encode())
+    path.write_bytes(data)
 
 
 def invoke(script, *args):
@@ -96,19 +123,23 @@ class RuntimeContractTests(unittest.TestCase):
             },
         }
 
-    def prepare(self, profile=None, run=None, source=None, capabilities=None):
+    def prepare(self, profile=None, run=None, source=None, capabilities=None, revision_plan=None):
         write_json(self.preset_path, profile or self.profile)
         args = ["--run-dir", run or self.run, "--topic", "Synthetic notice", "--input-mode", "research",
                 "--cutoff", "2026-11-17", "--preset", self.preset_path,
                 "--engine-source", source or SOURCE, "--offline"]
+        if revision_plan is not None:
+            path = self.base / "commission.json"
+            write_json(path, revision_plan)
+            args.extend(["--revision-plan", path])
         if capabilities is not None:
             path = self.base / "capabilities-input.json"
             write_json(path, capabilities)
             args.extend(["--capabilities", path])
         return invoke(SKILL / "scripts" / "prepare_run.py", *args)
 
-    def check(self, run=None):
-        return invoke(SKILL / "scripts" / "check_delivery.py", "--run-dir", run or self.run)
+    def check(self, run=None, *flags):
+        return invoke(SKILL / "scripts" / "check_delivery.py", "--run-dir", run or self.run, *flags)
 
     def assertNotReady(self, result, contains=None):
         code, report = result
@@ -357,6 +388,118 @@ class RuntimeContractTests(unittest.TestCase):
         manifest["reviews"][0]["reviewer_id"] = "synthetic-writer"
         write_json(self.run / "core-manifest.json", manifest)
         self.assertNotReady(self.check())
+
+    def test_cumulative_run_freezes_commission_and_rejects_downgrade(self):
+        plan = {"rounds": [{"version": "Proposal", "requirements": [
+            {"id": "opening", "article_id": "article-en", "source": "Original synthetic commission",
+             "requirement": "Give the opening time."}]},
+            {"version": "Approved notice", "requirements": []}]}
+        code, report = self.prepare(revision_plan=plan)
+        self.assertEqual(code, 0, report)
+        binding = read_json(self.run / "run.json")["revision_plan"]
+        self.assertEqual(binding["plan_sha256"], digest((self.base / "commission.json").read_bytes()))
+        self.assertIn("--require-cumulative", (self.run / "RUN.md").read_text())
+        original = read_json(self.run / "core-manifest.json")
+        self.assertEqual(original["cumulative_revision"], {**binding, "checks": {}})
+        changed = copy.deepcopy(original)
+        del changed["cumulative_revision"]
+        write_json(self.run / "core-manifest.json", changed)
+        self.assertNotReady(self.check(), "frozen revision plan")
+        write_json(self.run / "core-manifest.json", original)
+        self.assertNotReady(self.check(None, "--expected-plan-sha256", "0" * 64), "frozen revision plan")
+        (self.run / "revision-plan.json").write_bytes(b"{}")
+        self.assertNotReady(self.check(), "frozen revision plan")
+
+    def test_handoff_can_explicitly_require_a_cumulative_plan(self):
+        self.complete_run()
+        self.assertNotReady(self.check(None, "--require-cumulative"), "frozen at preparation")
+
+    @unittest.skipUnless(shutil.which("pdfinfo"), "PDF page-count integration requires pdfinfo")
+    def test_cumulative_body_range_uses_final_delivery_and_actual_pdf_page_count(self):
+        profile = copy.deepcopy(self.profile)
+        descriptor = profile["deliverables"]["blog_en"]
+        descriptor.update(path="outputs/Notice.pdf", format="pdf", checks=["output_consistency", "document_render"],
+                          target={"metric": "rendered_pages", "min": 20, "max": 25, "enforcement": "required"})
+        plan = {"rounds": [{"version": "First notice", "requirements": [
+            {"id": "opening", "article_id": "article-en", "source": "Original synthetic commission",
+             "requirement": "Include the opening time."}]}, {"version": "New format", "requirements": [
+            {"id": "space", "article_id": "article-en", "source": "Latest notice brief",
+             "requirement": "Use the revised body-space range.",
+             "page_range": {"delivery_role": "blog_en", "min": 0.5, "max": 1}}]}]}
+        code, report = self.prepare(profile=profile, revision_plan=plan)
+        self.assertEqual(code, 0, report)
+        block = read_json(self.run / "core-manifest.json")["cumulative_revision"]
+        canonical_hash = self.build_core_fixture()
+        item_path = self.run / descriptor["path"]
+        item_path.parent.mkdir(parents=True, exist_ok=True)
+        write_test_pdf(item_path)
+        delivery = read_json(self.run / "delivery.json")
+        item = self.complete_record("blog_en", descriptor["path"], descriptor["checks"], "article-en",
+                                    {"canonical": canonical_hash})
+        item["checks"][1]["measured_value"] = 2
+        delivery["items"] = [item]
+        self.save_delivery(delivery)
+        manifest = read_json(self.run / "core-manifest.json")
+        manifest["artifacts"][0]["required_criteria"].append("revision_continuity")
+        specialist = copy.deepcopy(manifest["reviews"][0])
+        specialist.update(id="notice-continuity", criterion="revision_continuity", reviewer_id="synthetic-continuity")
+        manifest["reviews"].append(specialist)
+        manifest["cumulative_revision"] = block
+        for identifier in ("opening", "space"):
+            block["checks"][identifier] = {"status": "verified", "article_sha256": canonical_hash,
+                                           "quote": "The synthetic library opens at noon.", "evidence": TEST_EVIDENCE}
+        render = {"delivery_path": item["path"], "delivery_sha256": item["sha256"], "render_path": item["path"],
+                  "render_sha256": item["sha256"], "body_page_fractions": [0.75, 0]}
+        block["checks"]["space"]["body_render"] = render
+
+        def save_checks():
+            raw = json.dumps(block["checks"], sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()
+            for review in manifest["reviews"]:
+                if review["criterion"] in ("revision_continuity", "holistic"):
+                    review.update(revision_plan_sha256=block["plan_sha256"], revision_checks_sha256=digest(raw))
+            write_json(self.run / "core-manifest.json", manifest)
+
+        save_checks()
+        measurement = self.assertReady()["items"][0]["body_measurement"]
+        self.assertEqual((measurement["value"], measurement["physical_pages"]), (0.75, 2))
+        render["body_page_fractions"] = [0.75]
+        save_checks()
+        self.assertNotReady(self.check(), "every physical page")
+        render["body_page_fractions"] = [0.25, 0]
+        save_checks()
+        self.assertNotReady(self.check(), "outside")
+        render["body_page_fractions"] = [0.75, 0]
+        other = self.run / "other.pdf"
+        shutil.copyfile(item_path, other)
+        render["delivery_path"] = other.name
+        save_checks()
+        self.assertNotReady(self.check(), "current selected delivery")
+
+        # A Word handoff needs its own current document-to-render attestation.
+        docx_path = "outputs/Notice.docx"
+        self.update_profile(lambda p: p["deliverables"]["blog_en"].update(path=docx_path, format="docx"))
+        with zipfile.ZipFile(self.run / docx_path, "w") as archive:
+            archive.writestr("[Content_Types].xml",
+                             '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+                             '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+                             '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.'
+                             'wordprocessingml.document.main+xml"/></Types>')
+            archive.writestr("_rels/.rels",
+                             '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                             '<Relationship Id="r1" Target="word/document.xml" Type="http://schemas.openxmlformats.org/'
+                             'officeDocument/2006/relationships/officeDocument"/></Relationships>')
+            archive.writestr("word/document.xml", '<w:document xmlns:w="http://schemas.openxmlformats.org/'
+                             'wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>The synthetic library opens at noon.'
+                             '</w:t></w:r></w:p></w:body></w:document>')
+        word = self.complete_record("blog_en", docx_path, descriptor["checks"], "article-en", {"canonical": canonical_hash})
+        delivery["items"] = [word]
+        render.update(delivery_path=docx_path, delivery_sha256=word["sha256"])
+        save_checks()
+        self.save_delivery(delivery)
+        self.assertNotReady(self.check(), "document_render must bind")
+        word["checks"][1]["render_sha256"] = render["render_sha256"]
+        self.save_delivery(delivery)
+        self.assertReady()
 
     def test_legacy_manifest_cannot_bypass_current_review_contract(self):
         self.complete_run()

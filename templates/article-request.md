@@ -9,7 +9,8 @@ Fill this from the current episode brief. Attach the current source packet and c
 - Requested channels, formats and lengths, distinguishing firm limits from flexible space for explanation:
 - Source cutoff:
 - Selected voice per channel:
-- Applicable feedback and required elements:
+- Original commission and any requested comparison, including the actual source versions to compare:
+- Accepted fixes still in scope and evidence for each. Identify superseded requirements and what replaced them:
 - Known evidence gaps:
 - Authorized output location:
 
@@ -19,7 +20,7 @@ Choose the supported angle, compose each requested language for its reader, and 
 
 Use the pinned core to assign one independent reviewer to each applicable criterion. Give a separate teach-back reviewer the current article and audience description alone to start when the explanation depends on unfamiliar background. Give the other reviewers the brief, current article and relevant evidence. Include the exact comment anchors when revising. One writer integrates the findings, the affected specialists recheck the current text, and a fresh reviewer reads the complete revision. If a final edit changes it, repeat those checks. Record the actual agents or people, artifact versions and remaining gaps.
 
-Deliver only the requested channels with V1/V2/Draft versions, actual completed checks and material remaining gaps. Audio/video generation is a separate requested route; an approved script is not a finished recording.
+Deliver the requested channels using the brief’s filenames. Identify the reviewed versions and report actual checks and material gaps. Audio/video generation is a separate requested route; an approved script is not a finished recording.
 
 ## 可直接使用的中文入口
 

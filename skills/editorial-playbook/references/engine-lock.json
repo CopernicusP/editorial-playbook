@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "name": "evidence-to-article",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": "CopernicusP/evidence-to-article",
-  "commit": "a6899a5a2793407bb43b916e3d7893cc589d91b7",
+  "commit": "81ff2d1a15cbc9e2cf2cfb1c3baf2c14a5747153",
   "files": {
     "LICENSE": "65bc48c23516f8c8ae2a4444065fef2d633527c429a22d4a95a75dd8ae8f8cd8",
-    "skills/evidence-to-article/SKILL.md": "5ccc857a68e81993bf44db77e8e55e3d2f37db7c0ca719f852bac3ddda66f3fb",
+    "skills/evidence-to-article/SKILL.md": "4df9560c854f74ea0825e897a31b7a0da73fc1237e0d5c594cea1d4cc9105a96",
     "skills/evidence-to-article/references/authorial-voice.md": "a79f2605f5a9cb6453ac04237c3d1f611c82c34fa7aad60a5a626abde61bf704",
     "skills/evidence-to-article/references/channels.md": "da0c3b526945b05f5c4f87f55549dcda80ff64f9c76bce5396bc56485280fd96",
-    "skills/evidence-to-article/references/editorial-decisions.md": "9252ecdeb012fc098fc00a92b03c6d91c6944dc0c99ba0218fd589e1bc30c99a",
-    "skills/evidence-to-article/references/manifest-contract.md": "8006fe7d9e7c7d0b28868f50d61ecf090843fa1de0cc8f6e441d878547cf9945",
+    "skills/evidence-to-article/references/editorial-decisions.md": "78b11be2c1b0a67a4bc6e3039b5f71e55748a3dbae30971332439ed08b9931c6",
+    "skills/evidence-to-article/references/manifest-contract.md": "8248fcd89660cd589272d8a2b599cad26fa80aa07236495363f4622824865284",
     "skills/evidence-to-article/references/style-cards.md": "883ea401fc724a3df8c3cf7703a0e0334f40f5eafe9d5b943f37488202296ee1",
     "skills/evidence-to-article/scripts/build_outputs.py": "5f0ca5f3e876cf30aa01411151a05a46eee2b1ff184c81188208fb140dbebc76",
-    "skills/evidence-to-article/scripts/check_run.py": "8a12a65e4e35a9dec9e1d14d186365bd88e9e47757e377130507af23e94f692d"
+    "skills/evidence-to-article/scripts/check_run.py": "fa947c82722b308454c3bc797486cc259f20862671eb4e1abb2efb014e95dcf1"
   }
 }

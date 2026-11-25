@@ -1,5 +1,11 @@
 # Runtime validation
 
+## Version 0.3.2
+
+All 47 native integration tests passed with the pinned Evidence to Article 0.3.2. The cumulative fixture preserves the prepared commission, requires renewed reviews for changed evidence, and applies the current body-length range over an older preset. The tests reject a missing plan, a mismatched retained digest, a substituted delivery, an incomplete list of physical PDF pages, an underfilled body and a Word file without a matching render receipt. A two-page synthetic PDF has a body observation on one page and a zero for references on the other. The checker verifies the actual PDF page count and the bound bytes. An identified reviewer must inspect the page content to supply the fractions.
+
+An independent application of the workflow prepared topic, research and draft routes, verified all nine core files and accepted a two-round synthetic revision against the delivered PDF. Dropping an earlier obligation, inventing another physical page, or substituting another path with identical bytes failed acceptance. Restoring the bound records passed.
+
 ## Version 0.3.1
 
 All 44 integration tests passed on Linux with Python 3.12.14 and the [locked Evidence to Article release](../skills/editorial-playbook/references/engine-lock.json). The suite runs the actual core checker against synthetic records. It exercises package setup and acceptance, required files and checks, output consistency, media bindings, stale hashes and the schema-2 review contract.
