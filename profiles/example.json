@@ -1,13 +1,13 @@
 {
   "profile_schema_version": 1,
   "id": "bilingual-explainer-example",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "purpose": "Editable public example, not organization policy or a machine-enforced schema",
   "engine": {
     "name": "evidence-to-article",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "public_repository": "CopernicusP/evidence-to-article",
-    "source_commit": "ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc"
+    "source_commit": "064f31c978860ecbb8c9c2162900e82568946c7e"
   },
   "execution": {
     "mode": "agent_reads_and_applies_profile",
@@ -50,10 +50,12 @@
     }
   },
   "review": {
-    "lanes": ["readability", "source", "overall"],
+    "required_criteria": ["readability", "source_meaning", "delivery"],
+    "scope_per_article": ["number_relevance", "reader_implications", "closing_synthesis", "comment_closure"],
+    "reviewer_assignment": "one_distinct_reviewer_per_applicable_criterion_then_a_fresh_whole_article_reader",
     "writer_self_approval_is_independent": false,
     "bind_to": "sha256_of_actual_reviewed_artifacts",
-    "after_edits": "affected_reviewers_recheck; other_reviewers_inspect_changes_before_renewing_status",
+    "after_edits": "one_writer_integrates_then_specialists_renew_current_checks_then_fresh_whole_article_read",
     "unavailable_independence": "record_limitation",
     "publication_approval": "separate_from_agent_review; apply_actual_requirements_only"
   },

@@ -25,7 +25,8 @@ Copy this template to the private run location. Replace placeholders with curren
 ## Inputs and decisions
 
 - Required source material and inaccessible items:
-- Applicable feedback, with its scope:
+- Supplied feedback and accessible comment anchors:
+- Applicable review criteria per article, with a reason for scoped exclusions:
 - Selected angle and reason:
 - Section jobs and evidence needed:
 - Known constraints and assumptions:

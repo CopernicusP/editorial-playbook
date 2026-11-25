@@ -18,10 +18,10 @@ Use a new report filename for each saved audit; existing report files are not ov
 
 | Record | Contents |
 | --- | --- |
-| `core-manifest.json` | Canonical articles, their internal TXT/HTML companions, sources, exact claim occurrences and independent readability/source/overall reviews |
+| `core-manifest.json` | Canonical articles, their internal TXT/HTML companions, sources, exact claim occurrences, one independent specialist per applicable criterion and a subsequent fresh whole-article review |
 | `delivery.json` | Every requested preset role, its delivered file, current status/hash, required checks and any applicable approval |
 
-Follow the core's [manifest contract](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/references/manifest-contract.md). Keep the core manifest directly in the run directory so its relative artifact paths use the same base. Article deliverables must identify the correct audited canonical article and language. Internal audit exports can remain separate from reader-facing files.
+Follow the core's [manifest contract](https://github.com/CopernicusP/evidence-to-article/blob/064f31c978860ecbb8c9c2162900e82568946c7e/skills/evidence-to-article/references/manifest-contract.md). New packages require schema 2, including scoped criteria, current specialist approvals and the later whole-article review. See the [run guide](../skills/editorial-playbook/references/run-guide.md) for criterion IDs and applicability notes. Use the matching earlier playbook and lock to reproduce an archived run. Keep the core manifest directly in the run directory so its relative artifact paths use the same base. Article deliverables must identify the correct audited canonical article and language. Internal audit exports can remain separate from reader-facing files.
 
 Factual packages require nonempty source and claim inventories. Empty inventories keep a package incomplete even where the underlying core reports only a coverage warning.
 
@@ -73,6 +73,7 @@ Each required check uses a kind defined by the preset and records:
   "kind": "output_consistency",
   "status": "not_run",
   "reviewer_id": null,
+  "reviewer_type": null,
   "reviewed_at": null,
   "artifact_sha256": null,
   "evidence": "",
@@ -80,9 +81,9 @@ Each required check uses a kind defined by the preset and records:
 }
 ```
 
-This example is intentionally incomplete. After the work occurs, replace the fields with the actual observation, reviewer, timezone-bearing timestamp and file digest. Use `pass`, `fail` or `not_run`; do not copy another check's result.
+This example is intentionally incomplete. After the work occurs, replace the fields with the actual observation, reviewer identity and type (`agent`, `human` or `tool`), timezone-bearing timestamp and file digest. Use `pass`, `fail` or `not_run`; do not copy another check's result.
 
-A passing attestation must identify the current item hash and the evidence for the check. Every required check must name a reviewer other than the item's author or producer, including format and measurement checks. A tool identity is appropriate for a check the tool actually performed; it cannot stand in for source reading or listening. The program validates this record and association, not the reviewer's lived actions.
+A passing attestation must identify the current item hash and the evidence for the check. Every required check must name a reviewer other than the item's author or producer, including format and measurement checks. Keep source fidelity, prose and delivery assignments independent across the entire run, including linked or later-produced formats. Keep one final article reviewer free of specialist or package-check assignments. The same delivery reviewer may inspect several technical properties. A tool identity is appropriate for a measurement the tool actually performed; it cannot stand in for source reading or listening. The program validates this record and association, not the reviewer's lived actions.
 
 Additional check records are also validated. Do not leave stale hashes, invalid statuses or failed checks in the active record after an issue has been repaired; retain superseded records in the audit history.
 

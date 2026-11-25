@@ -2,5 +2,5 @@ interface:
   display_name: Editorial Playbook
   short_description: Prepare, write and check bilingual editorial packages
   default_prompt: Use $editorial-playbook with the bilingual-finance preset to prepare
-    my requested article or media package, load Evidence to Article and check every
-    deliverable.
+    my requested package, load the pinned Evidence to Article core, assign a reviewer
+    per applicable criterion and arrange a fresh read of the integrated article.

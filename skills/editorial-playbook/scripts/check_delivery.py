@@ -22,6 +22,8 @@ MAX_JSON = 16 * 1024 * 1024
 MAX_TEXT = 32 * 1024 * 1024
 DIGEST = re.compile(r"[0-9a-f]{64}\Z")
 STATES = ("changes_required", "blocked", "incomplete", "approval_pending")
+REQUIRED_ARTICLE_CRITERIA = {"readability", "source_meaning", "delivery"}
+SCOPED_ARTICLE_CRITERIA = {"number_relevance", "reader_implications", "closing_synthesis", "comment_closure"}
 SCOPE = (
     "Checks files, dependency integrity, a freshly executed Evidence to Article "
     "audit, and declared review attestations. It does not read sources, judge "
@@ -166,6 +168,22 @@ def inspect_file(path, kind):
     raise ValueError("unsupported format: " + str(kind))
 
 
+def validate_article_criteria(artifact):
+    identifier = artifact["id"]
+    criteria = artifact.get("required_criteria")
+    exclusions = artifact.get("inapplicable_criteria", {})
+    if not isinstance(criteria, list) or any(not nonblank(name) for name in criteria):
+        raise ValueError(identifier + " requires a list of applicable article criteria")
+    if not isinstance(exclusions, dict) or any(not nonblank(reason) for reason in exclusions.values()):
+        raise ValueError(identifier + " requires a concrete reason for each inapplicable criterion")
+    active = set(criteria)
+    if active.intersection(exclusions):
+        raise ValueError(identifier + " declares a criterion both applicable and inapplicable")
+    missing = (REQUIRED_ARTICLE_CRITERIA - active) | (SCOPED_ARTICLE_CRITERIA - active - exclusions.keys())
+    if missing:
+        raise ValueError(identifier + " has unaccounted article criteria: " + ", ".join(sorted(missing)))
+
+
 def audit(run_dir):
     issues, items_report = [], []
     result = {"schema_version": 1, "ok": False, "status": "incomplete",
@@ -262,15 +280,24 @@ def audit(run_dir):
         issue("run_schema", str(exc))
         return finish()
 
-    core_manifest, canonical, engine_ok = None, {}, False
+    canonical, core_reviews, article_writers, engine_ok = {}, [], set(), False
     try:
         lock = load_lock()
         result["engine"] = verify_engine(engine_root, lock)
+        if run.get("engine") != {key: lock[key] for key in ("name", "version", "repository", "commit")}:
+            raise ValueError("Declared run engine differs from the verified lock")
         engine_ok = True
     except (OSError, ValueError, TypeError, KeyError) as exc:
         issue("engine_integrity", str(exc), "blocked")
     try:
         core_manifest = read_object(manifest_path)
+        if type(core_manifest.get("schema_version")) is not int or core_manifest["schema_version"] != 2:
+            raise ValueError("This release requires a schema-2 core manifest for criterion-level and fresh final reviews")
+        if not isinstance(core_manifest.get("reviews"), list):
+            raise ValueError("core manifest reviews must be a list")
+        core_reviews = core_manifest["reviews"]
+        if nonblank(core_manifest.get("integrator_id")):
+            article_writers.add(core_manifest["integrator_id"])
         artifacts = core_manifest.get("artifacts")
         if not isinstance(artifacts, list) or any(not isinstance(x, dict) for x in artifacts):
             raise ValueError("core manifest artifacts must be objects")
@@ -286,6 +313,9 @@ def audit(run_dir):
             core_paths.add(artifact_path)
             if artifact.get("kind") == "article":
                 canonical[identifier] = artifact
+                if nonblank(artifact.get("author_id")):
+                    article_writers.add(artifact["author_id"])
+                validate_article_criteria(artifact)
         for claim in core_manifest.get("claims", []):
             if not isinstance(claim, dict) or not isinstance(claim.get("occurrences"), list):
                 raise ValueError("invalid core claim occurrence declarations")
@@ -367,6 +397,16 @@ def audit(run_dir):
         except (OSError, ValueError, TypeError, KeyError, zipfile.BadZipFile, subprocess.TimeoutExpired) as exc:
             issue("file_format", str(exc), role=role)
 
+    # Keep the same specialist's remit across languages, adaptations and media.
+    editorial_assignments = {}
+    reviewer_types = {}
+    for review in core_reviews:
+        if (isinstance(review, dict) and nonblank(review.get("reviewer_id")) and
+                nonblank(review.get("criterion")) and review.get("reviewer_type") in ("agent", "human")):
+            editorial_assignments[review["reviewer_id"]] = review["criterion"]
+            reviewer_types[review["reviewer_id"]] = review["reviewer_type"]
+    check_criteria = {criterion: criterion for criterion in editorial_assignments.values() if criterion != "holistic"}
+    check_criteria.update(readability="readability", source_review="source_meaning")
     for role in required:
         item = indexed.get(role)
         if item is None or item.get("status") != "complete":
@@ -413,8 +453,24 @@ def audit(run_dir):
                 issue("failed_check", kind + " reports a failure.", role=role)
             if any(not nonblank(check.get(k)) for k in ("reviewer_id", "evidence")) or not valid_stamp(check.get("reviewed_at")):
                 issue("check_attestation", kind + " needs reviewer, evidence and a timezone-qualified timestamp.", role=role)
-            if check.get("reviewer_id") == item.get("author_id"):
-                issue("self_review", kind + " cannot be approved by its own author/producer.", role=role)
+            reviewer = check.get("reviewer_id")
+            if nonblank(reviewer) and reviewer != reviewer.strip():
+                issue("reviewer_id", kind + " reviewer identity must have no surrounding whitespace.", role=role)
+            reviewer_type = check.get("reviewer_type")
+            if reviewer_type not in ("agent", "human", "tool"):
+                issue("reviewer_type", kind + " needs the actual reviewer type (agent, human or tool).", role=role)
+            criterion = check_criteria.get(kind, "delivery")
+            if reviewer_type == "tool" and kind in ("source_review", "readability", "full_listening", "full_playback"):
+                issue("reviewer_type", kind + " requires an agent or human who performed the review.", role=role)
+            if nonblank(reviewer):
+                if reviewer in reviewer_types and reviewer_types[reviewer] != reviewer_type:
+                    issue("reviewer_type", reviewer + " has inconsistent reviewer types in this run.", role=role)
+                reviewer_types[reviewer] = reviewer_type
+                previous = editorial_assignments.setdefault(reviewer, criterion)
+                if previous != criterion:
+                    issue("reviewer_independence", kind + " needs a reviewer independent of " + previous + ".", role=role)
+            if nonblank(reviewer) and (reviewer == item.get("author_id") or reviewer in article_writers):
+                issue("self_review", kind + " needs a reviewer independent of the editorial writers and item producer.", role=role)
             if check.get("artifact_sha256") != hashes.get(role) or role not in hashes:
                 issue("stale_check", kind + " is not bound to the current output bytes.", role=role)
             related = check.get("related_hashes", {})

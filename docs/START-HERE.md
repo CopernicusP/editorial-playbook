@@ -20,7 +20,7 @@ For the bundled media preset, select Google NotebookLM or Google Gemini TTS and 
 | --- | --- | --- |
 | Reading supplied files and original sources | Research and material-claim verification | Identify evidence gaps; do not claim unavailable sources were read |
 | Python 3.9+, file access and access to the pinned core or a verified cache | Setup, dependency verification and executable acceptance | Follow available instructions with an explicitly limited status; no script-pass claim |
-| Separate reviewers or agents | Independent readability, source and delivery reviews | Record limited independence; self-review cannot satisfy independent approval |
+| Separate reviewers or agents | One independent specialist per applicable criterion and a fresh whole-article reviewer | Record limited independence; self-review cannot satisfy independent approval |
 | Document rendering | Actual page counts and layout review | Keep render checks incomplete |
 | Authorized speech generation, download, transcription and full listening | Finished podcast package | Deliver completed text work and report media blockers |
 | Video editing, permitted assets and playback inspection | Finished video package | Keep the video package incomplete or blocked |

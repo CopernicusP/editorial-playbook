@@ -144,6 +144,9 @@ class RuntimeContractTests(unittest.TestCase):
             "id": "article-en", "kind": "article", "path": "article-en.md", "language": "en",
             "author_id": "synthetic-writer", "sha256": article_hash,
             "expected_body_count": {"min": 1, "max": 100},
+            "required_criteria": ["readability", "source_meaning", "delivery", "reader_implications", "closing_synthesis"],
+            "inapplicable_criteria": {"number_relevance": "No quantitative comparison in this software fixture.",
+                                     "comment_closure": "The synthetic brief supplied no comments."},
         }]
         for kind in ("txt", "html"):
             path = self.run / "audit" / ("article-en." + kind)
@@ -151,16 +154,27 @@ class RuntimeContractTests(unittest.TestCase):
                               "path": path.relative_to(self.run).as_posix(), "language": "en",
                               "author_id": "synthetic-writer", "sha256": digest(path.read_bytes()),
                               "canonical_id": "article-en"})
+        lanes = {"readability": "readability", "source_meaning": "source", "delivery": "overall",
+                 "reader_implications": "readability", "closing_synthesis": "readability", "holistic": "overall"}
+        reviews = []
+        for criterion, lane in lanes.items():
+            record = {"id": "test-" + criterion, "lane": lane, "criterion": criterion,
+                      "reviewer_id": "synthetic-reviewer-" + criterion, "reviewer_type": "agent",
+                      "decision": "approve", "completed_at": STAMP, "artifact_hashes": {"article-en": article_hash},
+                      "findings": [], "note": TEST_EVIDENCE}
+            if criterion == "delivery":
+                record["artifact_hashes"] = {file["id"]: file["sha256"] for file in artifacts}
+            if criterion == "holistic":
+                record.update(started_at="2026-11-17T12:01:00+00:00", completed_at="2026-11-17T12:10:00+00:00")
+            reviews.append(record)
         manifest = {
-            "schema_version": 1, "artifacts": artifacts,
+            "schema_version": 2, "integrator_id": "synthetic-writer", "artifacts": artifacts,
             "sources": [{"id": "s1", "locator": "evidence/synthetic-notice.txt", "status": "read", "read_at": STAMP,
                          "note": TEST_EVIDENCE}],
             "claims": [{"id": "c1", "critical": True, "status": "support", "source_ids": ["s1"],
                         "occurrences": [{"path": "article-en.md", "language": "en",
                                          "quote": "The synthetic library opens at noon."}]}],
-            "reviews": [{"id": "test-" + lane, "lane": lane, "reviewer_id": "synthetic-reviewer-" + lane,
-                         "decision": "approve", "artifact_hashes": {"article-en": article_hash}, "findings": [],
-                         "note": TEST_EVIDENCE} for lane in ("readability", "source", "overall")],
+            "reviews": reviews,
         }
         write_json(self.run / "core-manifest.json", manifest)
         return article_hash
@@ -171,7 +185,7 @@ class RuntimeContractTests(unittest.TestCase):
             "role": role, "path": path, "status": "complete", "sha256": file_hash,
             "author_id": "synthetic-writer", "canonical_id": canonical_id,
             "checks": [{"kind": kind, "status": "pass", "reviewer_id": "synthetic-reviewer-" + kind,
-                        "reviewed_at": STAMP, "artifact_sha256": file_hash, "evidence": TEST_EVIDENCE,
+                        "reviewer_type": "agent", "reviewed_at": STAMP, "artifact_sha256": file_hash, "evidence": TEST_EVIDENCE,
                         "related_hashes": dict(related or {})} for kind in checks],
         }
 
@@ -252,7 +266,9 @@ class RuntimeContractTests(unittest.TestCase):
         self.assertEqual(report["status"], "prepared")
         delivery = read_json(self.run / "delivery.json")
         self.assertTrue(all(x["status"] == "pending" and not x["checks"] for x in delivery["items"]))
-        self.assertEqual(read_json(self.run / "core-manifest.json")["reviews"], [])
+        manifest = read_json(self.run / "core-manifest.json")
+        self.assertEqual(manifest["schema_version"], 2)
+        self.assertEqual(manifest["reviews"], [])
         self.assertNotReady(self.check())
 
     def test_preflight_keeps_unobserved_capabilities_unknown(self):
@@ -341,6 +357,45 @@ class RuntimeContractTests(unittest.TestCase):
         manifest["reviews"][0]["reviewer_id"] = "synthetic-writer"
         write_json(self.run / "core-manifest.json", manifest)
         self.assertNotReady(self.check())
+
+    def test_legacy_manifest_cannot_bypass_current_review_contract(self):
+        self.complete_run()
+        manifest = read_json(self.run / "core-manifest.json")
+        manifest["schema_version"] = 1
+        write_json(self.run / "core-manifest.json", manifest)
+        self.assertNotReady(self.check(), "schema-2")
+
+    def test_scoped_criteria_need_a_review_or_concrete_exclusion(self):
+        self.complete_run()
+        manifest = read_json(self.run / "core-manifest.json")
+        manifest["artifacts"][0]["inapplicable_criteria"].pop("number_relevance")
+        write_json(self.run / "core-manifest.json", manifest)
+        self.assertNotReady(self.check(), "number_relevance")
+
+    def test_fresh_whole_article_review_is_required(self):
+        self.complete_run()
+        manifest = read_json(self.run / "core-manifest.json")
+        manifest["reviews"] = [review for review in manifest["reviews"] if review["criterion"] != "holistic"]
+        write_json(self.run / "core-manifest.json", manifest)
+        self.assertNotReady(self.check(), "holistic")
+
+    def test_delivery_reviewer_is_independent_of_canonical_prose(self):
+        delivery = self.complete_run()
+        delivery["items"][0]["checks"][0]["reviewer_id"] = "synthetic-reviewer-readability"
+        self.save_delivery(delivery)
+        self.assertNotReady(self.check(), "reviewer_independence")
+
+    def test_holistic_reviewer_cannot_inspect_an_unlinked_deliverable(self):
+        delivery = self.complete_pdf_run()
+        delivery["items"][1]["checks"][0]["reviewer_id"] = "synthetic-reviewer-holistic"
+        self.save_delivery(delivery)
+        self.assertNotReady(self.check(), "reviewer_independence")
+
+    def test_missing_reviewer_type_cannot_pass(self):
+        delivery = self.complete_run()
+        delivery["items"][0]["checks"][0].pop("reviewer_type")
+        self.save_delivery(delivery)
+        self.assertNotReady(self.check(), "reviewer_type")
 
     def test_missing_claim_inventory_blocks_publication_package(self):
         self.complete_run()

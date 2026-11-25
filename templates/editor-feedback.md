@@ -5,21 +5,23 @@ Complete this only for work actually performed. Keep private passages, identitie
 - Run and channel:
 - Artifact path/version and SHA-256:
 - Author identity:
-- Reviewer identity and type: agent / human
-- Review lane: readability / source / overall
+- Reviewer identity and type (agent or human)
+- Criterion and scope for this reviewer, or fresh whole-article read
+- For direct reader feedback, identify the person and the observation actually obtained
 - Review date:
 - Brief, sources and other material actually read:
 - Decision: changes requested / approved / limited review
 
 ## Findings and repairs
 
-| Finding ID | Exact passage or file location | Observed problem and effect | Severity | Repair made or reason retained | Recheck and status |
-| --- | --- | --- | --- | --- | --- |
-| | | | | | |
+| Comment or finding ID | Original passage or file location | Requested change or observed problem | Revised passage/location or reason retained | Rechecker, final version/hash and disposition |
+| --- | --- | --- | --- | --- |
+| | | | | |
 
 - Revised artifact and current hash, if changed:
 - Affected content actually re-reviewed:
-- Remaining limitations or blockers:
+- Whole-article reviewer, reviewed version/hash, start and completion times (when this is the final read):
+- Remaining limitations, inaccessible anchors or open issues:
 - Superseded review record location:
 
 ## Reusable learning, if supported

@@ -1,18 +1,12 @@
-# Validation record for version 0.2.0
+# Runtime validation
 
-Date: 2026-11-17. Runtime tested on Python 3.12.14 in Linux. Python 3.9+ is the intended baseline; other hosts and AI products have not been certified by this record.
+## Version 0.3.0
 
-Release check: all 37 integration tests passed against the public package and the verified core files. The installed skill also passed its package validation.
+All 43 integration tests passed on Linux with Python 3.12.14 and the [locked Evidence to Article release](../skills/editorial-playbook/references/engine-lock.json). The suite runs the actual core checker against synthetic records. It exercises package setup and acceptance, required files and checks, output consistency, media bindings, stale hashes and the schema-2 review contract.
 
-## What was exercised
+A separate end-to-end exercise prepared topic, research and draft inputs. It accepted a complete synthetic package and rejected missing specialist or whole-article reviews, conflicting reviewer assignments across languages or deliverables, stale review evidence, legacy-schema substitution and changed dependency files. Repairing an article required current specialist records and a renewed complete read. The nine locked dependency files were also checked against the exact public revision.
 
-- A real online preparation retrieved the nine locked Evidence to Article v0.2.0 files and verified every SHA-256. Offline preparation used those same repository-relative files and the same integrity checks.
-- CLI integration tests use the actual locked core checker. They cover prepared-but-empty runs, valid synthetic records, missing outputs and checks, malformed statuses, stale content/review hashes, self-review, missing claim inventories, incorrect language/canonical associations, required and claimed approvals, strict/advisory lengths, PDF signatures, dependency tampering and unsafe paths.
-- Media contract tests use a short locally generated silent MP3 fixture. Provider and reviewer records are explicitly synthetic software-test data. They check provider selection, missing listening records and stale audio/transcript associations; they do not demonstrate Google generation or perceptual quality.
-- A fresh agent followed the installed instructions to prepare an eleven-deliverable video run offline. Acceptance correctly returned incomplete for the missing sources, articles and media. No completed research, content, listening or publication was claimed.
-- Independent code and documentation reviews identified and repaired inconsistencies in additional measurement attestations, supported formats, page measurements, optional approval claims, manifest-relative paths and cached Python execution guidance.
-
-This validates setup and acceptance behavior within the stated scope. It does not establish that a complete real-world article/podcast/video package has been produced across multiple AI services, or that the workflow reduces editing time. Source reading, actual prose review, document previews and media review remain work performed by the host tools and identified reviewers.
+The software fixtures do not represent human reader tests or publication approval. The silent MP3 fixture exercises media records only. Actual source reading, prose review, listening and rendering still require the identified people, agents and tools.
 
 ## Reproduce the software tests
 

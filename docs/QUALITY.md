@@ -2,25 +2,31 @@
 
 Review should locate and repair failures a reader or listener would encounter. Fluency, an AI-detector score and checklist completion do not establish accuracy or usefulness.
 
-Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/ba0f2d04d3b64a67e9118273444dc19bbd8f0ccc/skills/evidence-to-article/SKILL.md). The playbook adds package-level acceptance around that work.
+Use the pinned core's [review and repair workflow](https://github.com/CopernicusP/evidence-to-article/blob/064f31c978860ecbb8c9c2162900e82568946c7e/skills/evidence-to-article/SKILL.md). The playbook adds package-level acceptance around that work.
 
 ## Review responsibilities
 
-The coordinator selects the supported angle, assigns section jobs, integrates findings and actually revises the text. Use fresh reviewers separate from the writer. Give them the brief, current files and relevant sources without an expected approval.
+Give each applicable criterion to a different independent reviewer. A lane groups related work in the core manifest. Two criteria in the same lane still need different reviewers. Supply the current article, original brief and relevant evidence without earlier verdicts. A specialist may review the same criterion in both languages. Keep the criterion tied to each article and preserve each reviewer's independence across the whole assignment.
 
-| Lane | Required work | Useful finding |
-| --- | --- | --- |
-| Readability | Read each language as an article; reconstruct its argument and inspect transitions, explanation and voice | Exact passage, reader difficulty and concrete repair |
-| Source | Open evidence behind material claims; check measures, dates, roles, attribution, conditions and cross-language meaning | Claim, precise source support and necessary correction |
-| Overall | Reconcile revisions, scope, lengths, versions, exports and requested media; inspect the delivered forms | Affected file, observed mismatch or missing check and its consequence |
+| Criterion | Question for its reviewer |
+| --- | --- |
+| Prose and readability | Where would the intended reader lose the thread? Quote the passage, explain the difficulty and identify a concrete repair. |
+| Source fidelity | Does the actual source support each material claim, including its units, period, denominator, attribution and uncertainty? |
+| Numerical evidence choice | Which figure answers the reader's question? Identify decorative or redundant numbers, any missing comparison and how the choice changes the inference. A correct number can still be a poor choice. |
+| Reader implications | Name the reader or stakeholder. What decision, cost, constraint or reasonable expectation changes for that person? Mark any effect the evidence leaves uncertain. |
+| Closing synthesis | State the question raised by the opening, then quote the ending's answer. Look for a supported conclusion, any condition that limits it and any gap between question and answer. |
+| Comment closure | Trace each accessible comment ID and original anchor to its revised passage. Record what was fixed, deliberately retained or remains open, and why. |
+| Delivery | Compare the actual exports with the reviewed text. Inspect the requested format, render, length and media where applicable. |
 
-These are responsibilities, not invented people. If independent agents or reviewers are unavailable, record the limitation and deliver a limited-review draft. Repeated self-review does not satisfy the independent-review requirement.
+For example, a synthetic notice says a town pool will open a week later than scheduled and gives its total visitor count last summer. The source reviewer can verify both figures. The numerical-evidence reviewer decides which helps a family arranging lessons. The reader-implications reviewer checks whether a postponement of lessons follows from the notice. Record an agent's reading as an editorial judgment. Claim direct reader feedback only when someone in that audience actually gave it.
 
-## Bind decisions to the current work
+## Integrate and review the delivered version
 
-Use the [feedback record](../templates/editor-feedback.md) for substantive observations and the machine-readable records for acceptance. Name the real reviewer, exact artifact hash, review time, findings and unresolved issues.
+One writer reconciles findings against the evidence and revises the complete article. Use the [feedback record](../templates/editor-feedback.md) to connect a finding or comment to the original passage, its disposition, the revised passage and its recheck. Keep unavailable comments or unresolved objections visible.
 
-After edits, affected lanes recheck the substance and consequences. Other lanes inspect the difference before renewing a decision. Replacing an old hash in an approval without reviewing the new bytes is not renewed review. Keep superseded decisions separately.
+Affected specialists re-read the revised passage in context, including downstream effects. The other specialists inspect the changes before renewing their own decisions. After all specialists finish, give every current article and the brief to one fresh reviewer who did not write, integrate or perform a specialist review anywhere in the run. Bind that reading to all the canonical hashes. Ask for a whole-article verdict. Record each reviewer's actual identity, type and criterion, exact artifact hashes, timing, findings and limitations. With limited concurrency, queue distinct reviewers. With no available independent review, report the specific gaps and deliver a limited-review draft.
+
+If the writer edits the article after these reviews, renew the affected specialist checks and the fresh whole-article read on the changed version. Rebuild and recheck its exports. Check any subsequently produced documents or media on their actual final files. Record precisely which forms each reviewer inspected. Retain superseded decisions in the private history.
 
 After two unsuccessful repairs of the same issue, change the approach or disclose the precise remaining issue. Do not repeat cosmetic rewrites and describe each one as a successful improvement.
 

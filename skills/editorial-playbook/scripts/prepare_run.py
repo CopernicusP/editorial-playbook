@@ -203,7 +203,7 @@ def prepare(args):
             "items": items,
             "approval": {"required": False, "status": "not_requested", "reviewer_id": None, "evidence": None},
         })
-        write_json(staging / "core-manifest.json", {"schema_version": 1, "artifacts": [], "sources": [], "claims": [], "reviews": []})
+        write_json(staging / "core-manifest.json", {"schema_version": 2, "integrator_id": None, "artifacts": [], "sources": [], "claims": [], "reviews": []})
         write_json(staging / "capabilities.json", capabilities)
         report = preflight(capabilities, profile, args.package, engine_result)
         write_json(staging / "preflight.json", report)
@@ -215,7 +215,10 @@ Preparation only: no research, article, audio, video, review or publication has 
 
 - Read `run.json`, `profile.json` and `preflight.json` for this run's scope and gaps.
 - Read the verified core entry: `{core_skill}`. Follow its local relative references.
-- Record exact sources and genuine independent reviews in `core-manifest.json`.
+- Use the schema-2 `core-manifest.json` and the verified core's `references/manifest-contract.md`. Identify the one writer who integrates the run in `integrator_id`. Declare each article's `required_criteria` before assigning reviewers.
+- Include `readability`, `source_meaning` and `delivery`. Scope `number_relevance`, `reader_implications`, `closing_synthesis` and `comment_closure`; put a concrete reason for each inapplicable one in that article's `inapplicable_criteria` object. Add further criteria from the brief.
+- Assign a different independent reviewer to each applicable criterion. Preserve comment IDs and anchors. One writer integrates findings. After the affected specialists recheck and the others renew decisions on the current version, one fresh reviewer reads the complete integrated work across all requested languages. Assign identities consistently across the run. A specialist may cover the same criterion across both languages. Further edits reopen affected checks and the final read.
+- Record actual reviewers, types, versions, source evidence and limitations. Technical checks, agent readings and direct human feedback each have their own provenance.
 - Write each requested deliverable, then record its current hash and actual checks in `delivery.json`.
 - The core checker is `{checks}`. The wrapper's `scripts/check_delivery.py --run-dir` invokes it again before accepting the package.
 - Keep the recording script distinct from the transcript of the finished audio. Mark unavailable stages blocked with a reason.
